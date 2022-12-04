@@ -1,38 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -47,13 +33,61 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Reviews {
+  id        String        @id @default(cuid())
+  userId    String
+  rating    Int
+  review    String
+  userName  String?
+  lawyerId  String
+  createdAt DateTime      @default(now())
+  user      LawyerDetails @relation(fields: [lawyerId], references: [lawyerId], onDelete: Cascade)
+}
+
+model Order {
+  id          String        @id @default(cuid())
+  lawyerId    String
+  clientId    String
+  createdAt   DateTime      @default(now())
+  price       Int
+  orderStatus OrderStatus   @default(PENDING)
+  client      User          @relation(fields: [clientId], references: [id])
+  lawyer      LawyerDetails @relation(fields: [lawyerId], references: [id])
+}
+
+model LawyerDetails {
+  id           String    @id @default(cuid())
+  lawyerId     String    @unique
+  institution  String
+  course       String
+  experience   Int
+  description  String
+  rating       Int?      @default(0)
+  country      String
+  expertise    String
+  fullName     String
+  services     String
+  state        String
+  numofreviews Int?      @default(0)
+  image        String?
+  price        Int       @default(0)
+  lawyer       User      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  orders       Order[]
+  reviews      Reviews[]
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
+  password      String?
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime       @default(now())
+  role          Role           @default(USER)
   accounts      Account[]
+  lawyerDetails LawyerDetails?
+  orders        Order[]
   sessions      Session[]
 }
 
@@ -63,4 +97,16 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum OrderStatus {
+  PENDING
+  FAILED
+  CONFORMED
+}
+
+enum Role {
+  USER
+  LAWYER
+  ADMIN
 }

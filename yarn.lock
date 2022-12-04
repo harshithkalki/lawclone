@@ -477,6 +477,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@tabler/icons@^1.115.0":
+  version "1.115.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.115.0.tgz#6c4a9e6087fcdc33e5aae2e5785090147bed7ebe"
+  integrity sha512-Eo1xMuG/+QpUk6QrtiAsmTSjc+A9IIBDauwPT4hVD/XKmnvh0UCCOuK8Zo/jZDIShcJdEcBA4p0wKgt7dbd1GA==
+
 "@tanstack/query-core@4.19.1":
   version "4.19.1"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.19.1.tgz#2e92d9e8a50884eb231c5beb4386e131ebe34306"
@@ -511,6 +516,11 @@
   version "10.4.3"
   resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.4.3.tgz#8db5dc9a5082feea593d58b845ceef6a1adaf3d9"
   integrity sha512-U+TVFtMUnySUfKHXjdpdZdFS268naGafbjQiG/H7t0OKpiLnbJ4IhgyYzj82Hvghb6Ow9E+UTNt6ALP7KoN4/g==
+
+"@types/bcryptjs@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@types/bcryptjs/-/bcryptjs-2.4.2.tgz#e3530eac9dd136bfdfb0e43df2c4c5ce1f77dfae"
+  integrity sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==
 
 "@types/json-schema@^7.0.9":
   version "7.0.11"
@@ -780,6 +790,11 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+bcryptjs@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
+  integrity sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==
 
 brace-expansion@^1.1.7:
   version "1.1.11"

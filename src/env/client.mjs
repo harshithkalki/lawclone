@@ -22,11 +22,12 @@ if (!_clientEnv.success) {
   throw new Error("Invalid environment variables");
 }
 
+/**
+ * Validate that client-side environment variables are exposed to the client.
+ */
 for (let key of Object.keys(_clientEnv.data)) {
   if (!key.startsWith("NEXT_PUBLIC_")) {
-    console.warn(
-      `❌ Invalid public environment variable name: ${key}. It must begin with 'NEXT_PUBLIC_'`,
-    );
+    console.warn("❌ Invalid public environment variable name:", key);
 
     throw new Error("Invalid public environment variable name");
   }
