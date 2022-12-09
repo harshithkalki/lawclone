@@ -1,30 +1,69 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-// Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-
-import { env } from "../../../env/server.mjs";
-import { prisma } from "../../../server/db/client";
+import NextAuth, { type NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { prisma } from '@/server/db/client';
+import { env } from '../../../env/server.mjs';
+import bcrypt from 'bcryptjs';
+// import { } from "@/pages/"
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    session({ session, token }) {
+      if (token.id && session.user) {
+        session.user.id = token.id as string;
       }
       return session;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
   },
-  // Configure one or more authentication providers
+  session: {
+    strategy: 'jwt',
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    // ...add more providers here
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text', placeholder: 'email@email.com' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials, req) {
+        const email = credentials?.email;
+        const password = credentials?.password;
+        if (!password) {
+          throw new Error(`${'kljsdKLS'}`);
+        }
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (user && user.password) {
+          const isPasswordMatched = await bcrypt.compare(
+            password,
+            user?.password
+          );
+
+          if (isPasswordMatched) {
+            return { ...user, password: undefined };
+          } else {
+            throw new Error(`${'kljsdKLS'}`);
+          }
+        } else {
+          throw new Error(`${'EMAIL_DOESNT_EXIST'}`);
+        }
+      },
+    }),
   ],
+  pages: {
+    signIn: '/signin',
+  },
 };
 
 export default NextAuth(authOptions);

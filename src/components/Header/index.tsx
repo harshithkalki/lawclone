@@ -87,10 +87,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function HeaderMenu() {
+export const HeaderMenu = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
-
   const { classes, theme } = useStyles();
 
   return (
@@ -109,6 +108,7 @@ export function HeaderMenu() {
               size='md'
               className={classes.searchCompo}
               icon={<IconSearch />}
+              placeholder='Search your lawyer'
             />
           </Group>
 
@@ -164,4 +164,4 @@ export function HeaderMenu() {
       </Drawer>
     </Box>
   );
-}
+};
