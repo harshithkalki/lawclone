@@ -14,6 +14,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -92,6 +93,13 @@ export const HeaderMenu = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const { classes, theme } = useStyles();
+  const { push } = useRouter();
+  const login = () => {
+    push('/signin');
+  };
+  const signup = () => {
+    push('/signup');
+  };
 
   return (
     <Box>
@@ -114,8 +122,10 @@ export const HeaderMenu = () => {
           </Group>
 
           <Group className={classes.hiddenMobile}>
-            <Button variant='default'>Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant='default' onClick={login}>
+              Log in
+            </Button>
+            <Button onClick={signup}>Sign up</Button>
             <Select data={['English', 'French']} size='xs' />
           </Group>
 
@@ -167,8 +177,10 @@ export const HeaderMenu = () => {
           />
 
           <Group position='center' grow pb='xl' px='md'>
-            <Button variant='default'>Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant='default' onClick={login}>
+              Log in
+            </Button>
+            <Button onClick={signup}>Sign up</Button>
           </Group>
         </ScrollArea>
       </Drawer>
