@@ -10,6 +10,7 @@ import {
   Drawer,
   ScrollArea,
   Autocomplete,
+  Select,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons';
@@ -115,6 +116,7 @@ export const HeaderMenu = () => {
           <Group className={classes.hiddenMobile}>
             <Button variant='default'>Log in</Button>
             <Button>Sign up</Button>
+            <Select data={['English', 'French']} size='xs' />
           </Group>
 
           <Burger
@@ -150,6 +152,14 @@ export const HeaderMenu = () => {
           <a href='#' className={classes.link}>
             Academy
           </a>
+
+          <Select
+            data={['English', 'French']}
+            size='xs'
+            maw={'fit-content'}
+            pl='md'
+            mt='sm'
+          />
 
           <Divider
             my='sm'
