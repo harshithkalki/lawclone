@@ -17,6 +17,7 @@ const Profile = () => {
         email='fdasfs'
         phone='dkfadsf'
         title='fdafds'
+        avatar={''}
       />
     </Center>
   );
