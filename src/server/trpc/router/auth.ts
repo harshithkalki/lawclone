@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
-import bcrypt from 'bcryptjs';
+import { z } from "zod";
+import { router, publicProcedure } from "../trpc";
+import bcrypt from "bcryptjs";
 
 export const authRouter = router({
   signup: publicProcedure
@@ -24,7 +24,7 @@ export const authRouter = router({
         });
         return {
           success: true,
-          message: 'Account created',
+          message: "Account created",
         };
       } catch (error) {
         return {
@@ -35,7 +35,7 @@ export const authRouter = router({
     }),
   isEmailExists: publicProcedure
     .input(z.string())
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
           email: input,
@@ -45,12 +45,12 @@ export const authRouter = router({
       if (user) {
         return {
           success: true,
-          message: 'Email already exists',
+          message: "Email already exists",
         };
       } else {
         return {
           success: false,
-          message: 'Email does not exist',
+          message: "Email does not exist",
         };
       }
     }),
