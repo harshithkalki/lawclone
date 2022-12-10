@@ -1,11 +1,12 @@
-import { SessionProvider } from 'next-auth/react';
-import type { Session } from 'next-auth';
-import type { AppType } from 'next/app';
-import { trpc } from '../utils/trpc';
-import { AppShell, MantineProvider } from '@mantine/core';
-import { useRouter } from 'next/router';
-import { HeaderMenu } from '../components/Header';
-import { Footer } from '../components/Footer';
+import { SessionProvider } from "next-auth/react";
+import type { Session } from "next-auth";
+import type { AppType } from "next/app";
+import { trpc } from "../utils/trpc";
+import { AppShell, MantineProvider } from "@mantine/core";
+import { useRouter } from "next/router";
+import { HeaderMenu } from "../components/Header";
+import { Footer } from "../components/Footer";
+import RouterTransition from "@/components/RouterTransition";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,26 +18,27 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <MantineProvider
         theme={{
-          colorScheme: 'dark',
+          colorScheme: "dark",
         }}
         withGlobalStyles
         withNormalizeCSS
       >
+        <RouterTransition />
         <AppShell
           styles={(theme) => ({
             main: {
               backgroundColor:
-                theme.colorScheme === 'dark'
+                theme.colorScheme === "dark"
                   ? theme.colors.dark[8]
                   : theme.colors.gray[0],
             },
           })}
-          navbarOffsetBreakpoint='sm'
+          navbarOffsetBreakpoint="sm"
           header={<HeaderMenu />}
           hidden={
-            router.pathname === '/signin' ||
-            router.pathname === '/signup' ||
-            router.pathname === '/chat'
+            router.pathname === "/signin" ||
+            router.pathname === "/signup" ||
+            router.pathname === "/chat"
           }
           footer={
             <Footer
@@ -44,11 +46,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
                 {
                   links: [
                     {
-                      label: 'support',
-                      link: '/',
+                      label: "support",
+                      link: "/",
                     },
                   ],
-                  title: 'help',
+                  title: "help",
                 },
               ]}
             />

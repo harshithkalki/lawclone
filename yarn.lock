@@ -262,6 +262,13 @@
     "@mantine/ssr" "5.9.1"
     "@mantine/styles" "5.9.1"
 
+"@mantine/nprogress@^5.9.3":
+  version "5.9.3"
+  resolved "https://registry.yarnpkg.com/@mantine/nprogress/-/nprogress-5.9.3.tgz#3afdf84eb7b0afa4148f361e7e6c803c0dcad09f"
+  integrity sha512-S6xkh373k9TsAh40Dsx0yGmRwVcX354ihK/AwYkhKMRRMZDC33u5mUw8EvMhWh/5bHVJnki3uXvFzSHD8UrSTA==
+  dependencies:
+    "@mantine/utils" "5.9.3"
+
 "@mantine/prism@^5.9.1":
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@mantine/prism/-/prism-5.9.1.tgz#622c84aecc4d6cbe6e6ee715e4abb3c3f567368d"
@@ -290,6 +297,11 @@
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.9.1.tgz#684ee4abcf042d768c7b32ea8b36d23e05017be7"
   integrity sha512-Uz0kbUyS1E6YmE1zU2tpT6n1y973Us1brTtoMjdiix9E1eZMvJ+fTTO2ie9clzWZ3r4atpi9kyWHQ9HIu2VoCg==
+
+"@mantine/utils@5.9.3":
+  version "5.9.3"
+  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.9.3.tgz#649726ed2ff001a7fcf512f805c5ee895d7a27f2"
+  integrity sha512-03Km80wjeQX2LHYpNrJ+kWbTrLmp1fupOGzkUvuPtbhoA4C1Zd9JfGI1UuGHSYQFTwMXmzjkHS3K9PngqjTl+g==
 
 "@next-auth/prisma-adapter@^1.0.4":
   version "1.0.5"

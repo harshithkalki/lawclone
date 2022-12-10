@@ -101,12 +101,19 @@ export default function AuthenticationTitle() {
           {({ values, handleBlur, handleChange, errors, touched }) => (
             <Form style={{ width: "100%" }} id="signUpForm">
               <Stack spacing={5}>
-                <FormikInput name="name" label="Name" />
+                <FormikInput
+                  name="name"
+                  label="Name"
+                  withAsterisk
+                  placeholder="Name"
+                />
                 <FormikInput
                   name="email"
                   id="email"
                   type="email"
                   label="Email"
+                  placeholder="Email"
+                  withAsterisk
                   labelProps={{ htmlFor: "email" }}
                 />
                 <PasswordInput
