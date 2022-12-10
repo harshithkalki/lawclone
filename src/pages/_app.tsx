@@ -33,7 +33,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
           })}
           navbarOffsetBreakpoint='sm'
           header={<HeaderMenu />}
-          hidden={router.pathname === '/login'}
+          hidden={
+            router.pathname === '/signin' ||
+            router.pathname === '/signup' ||
+            router.pathname === '/chat'
+          }
           footer={
             <Footer
               data={[
