@@ -1,18 +1,18 @@
-import { createStyles, Container, Box } from '@mantine/core';
-import { FormProgress } from './FormProgress';
-const BREAKPOINT = '@media (max-width: 755px)';
+import { createStyles, Container, Box } from "@mantine/core";
+import { FormProgress } from "./FormProgress";
+const BREAKPOINT = "@media (max-width: 755px)";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    position: 'relative',
-    boxSizing: 'border-box',
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+    position: "relative",
+    boxSizing: "border-box",
+    // backgroundColor:
+    //   theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
   },
 
   inner: {
-    position: 'relative',
-    paddingTop: 90,
+    position: "relative",
+    // paddingTop: 90,
     paddingBottom: 120,
 
     [BREAKPOINT]: {
@@ -28,8 +28,8 @@ const useStyles = createStyles((theme) => ({
     lineHeight: 1.1,
     marginBottom: 20,
     padding: 0,
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    textAlign: 'center',
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    textAlign: "center",
 
     [BREAKPOINT]: {
       fontSize: 42,
@@ -82,19 +82,19 @@ export const HeroTitle = () => {
         <Box
           sx={(theme) => ({
             backgroundColor:
-              theme.colorScheme === 'dark'
+              theme.colorScheme === "dark"
                 ? theme.colors.dark[6]
                 : theme.colors.gray[0],
-            textAlign: 'center',
+            textAlign: "center",
             padding: theme.spacing.xl,
             borderRadius: theme.radius.md,
 
-            '&:hover': {
-              backgroundColor:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[5]
-                  : theme.colors.gray[1],
-            },
+            // "&:hover": {
+            //   backgroundColor:
+            //     theme.colorScheme === "dark"
+            //       ? theme.colors.dark[5]
+            //       : theme.colors.gray[1],
+            // },
           })}
         >
           <FormProgress />
