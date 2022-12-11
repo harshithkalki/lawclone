@@ -1,11 +1,12 @@
 import { BsPencilSquare, BsThreeDots } from "react-icons/bs";
 import { MdNoteAlt } from "react-icons/md";
 import { GiChalkOutlineMurder } from "react-icons/gi";
+import { GrUserWorker } from "react-icons/gr";
 import { IoPeopleSharp, IoHomeSharp } from "react-icons/io5";
 import { TbReceiptTax } from "react-icons/tb";
 import { RiGovernmentFill } from "react-icons/ri";
-import EngineeringIcon from "@mui/icons-material/Engineering";
 import { createStyles, SimpleGrid, Title, Box } from "@mantine/core";
+import { FaUserNurse } from "react-icons/fa";
 
 const useStyles = createStyles((theme) => ({
   div: {
@@ -39,7 +40,7 @@ export default function WhatINeed({
     { title: "FAMILY/DIVORCE", icon: <IoPeopleSharp size={40} /> },
     { title: "INSURANCE", icon: <MdNoteAlt size={40} /> },
     { title: "FINANCE/TAXES", icon: <TbReceiptTax size={40} /> },
-    { title: "LABOR LAW", icon: <EngineeringIcon sx={{ fontSize: 40 }} /> },
+    { title: "LABOR LAW", icon: <FaUserNurse size={40} /> },
     { title: "RENT/REALESTATE", icon: <IoHomeSharp size={40} /> },
     {
       title: "GOVERNMENT ADMINISTRATION",
