@@ -34,28 +34,29 @@ model Session {
 }
 
 model Reviews {
-  id        String        @id @default(cuid())
-  userId    String
+  id        String   @id @default(cuid())
   rating    Int
   review    String
-  userName  String?
   lawyerId  String
-  createdAt DateTime      @default(now())
-  user      LawyerDetails @relation(fields: [lawyerId], references: [lawyerId], onDelete: Cascade)
+  clientId  String
+  createdAt DateTime @default(now())
+  lawyer    Lawyer   @relation(fields: [lawyerId], references: [lawyerId], onDelete: Cascade)
+  client    User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }
 
 model Order {
-  id          String        @id @default(cuid())
-  lawyerId    String
-  clientId    String
-  createdAt   DateTime      @default(now())
-  price       Int
-  orderStatus OrderStatus   @default(PENDING)
-  client      User          @relation(fields: [clientId], references: [id])
-  lawyer      LawyerDetails @relation(fields: [lawyerId], references: [id])
+  id            String      @id @default(cuid())
+  lawyerId      String
+  clientId      String
+  createdAt     DateTime    @default(now())
+  price         Int
+  transactionId String
+  orderStatus   OrderStatus @default(PENDING)
+  client        User        @relation(fields: [clientId], references: [id])
+  lawyer        Lawyer      @relation(fields: [lawyerId], references: [id])
 }
 
-model LawyerDetails {
+model Lawyer {
   id           String    @id @default(cuid())
   lawyerId     String    @unique
   institution  String
@@ -65,30 +66,129 @@ model LawyerDetails {
   rating       Int?      @default(0)
   country      String
   expertise    String
-  fullName     String
-  services     String
+  services     String[]
   state        String
   numofreviews Int?      @default(0)
   image        String?
   price        Int       @default(0)
+  language     language  @default(ENGLISH)
   lawyer       User      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
   orders       Order[]
   reviews      Reviews[]
 }
 
+enum language {
+  ENGLISH
+  SPANISH
+  FRENCH
+  GERMAN
+  ITALIAN
+  PORTUGUESE
+  RUSSIAN
+  CHINESE
+  JAPANESE
+  ARABIC
+  HINDI
+  KOREAN
+  TURKISH
+  VIETNAMESE
+  THAI
+  INDONESIAN
+  MALAY
+  URDU
+  BENGALI
+  PERSIAN
+  DUTCH
+  POLISH
+  SWEDISH
+  FINNISH
+  DANISH
+  NORWEGIAN
+  CZECH
+  ROMANIAN
+  HUNGARIAN
+  GREEK
+  BULGARIAN
+  SERBIAN
+  CROATIAN
+  SLOVENIAN
+  MACEDONIAN
+  SLOVAK
+  MALTESE
+  CATALAN
+  ICELANDIC
+  WELSH
+  BASQUE
+  GALICIAN
+  SCOTS_GAELIC
+  MALAGASY
+  MAORI
+  TAMIL
+  TELUGU
+  KANNADA
+  MALAYALAM
+  SINHALESE
+  BURMESE
+  KHMER
+  LAO
+  TIBETAN
+  MONGOLIAN
+  DZONGKHA
+  GEORGIAN
+  ARMENIAN
+  AZERBAIJANI
+  YIDDISH
+  KURDISH
+  HEBREW
+  UIGHUR
+  URUMCHI
+  KAZAKH
+  TATAR
+  UZBEK
+  TURKMEN
+  KYRGYZ
+  TAJIK
+  PUNJABI
+  GUJARATI
+  ORIYA
+  ASSAMESE
+  MARATHI
+  SANSKRIT
+  MANDARIN
+  CANTONESE
+  HAKKA
+  XHOSA
+  ZULU
+  AFRIKAANS
+  SWAHILI
+  SOMALI
+  LUXEMBOURGISH
+  LINGALA
+  KINYARWANDA
+  TSWANA
+  NYANJA
+  KIRUNDI
+  VIET
+}
+
 model User {
-  id            String         @id @default(cuid())
-  name          String
-  email         String         @unique
+  id            String    @id @default(cuid())
+  firstName     String
+  lastName      String
+  username      String    @unique
+  email         String    @unique
   password      String?
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime       @default(now())
-  role          Role           @default(USER)
+  createdAt     DateTime  @default(now())
+  role          Role      @default(USER)
+  balance       Int       @default(0)
+  language      language  @default(ENGLISH)
   accounts      Account[]
-  lawyerDetails LawyerDetails?
+  lawyer        Lawyer?
   orders        Order[]
   sessions      Session[]
+  reviews       Reviews[]
 }
 
 model VerificationToken {
