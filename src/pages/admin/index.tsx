@@ -1,15 +1,15 @@
-import OverviewTab from "@/components/admin/OverviewTab";
-import { Tabs } from "@mantine/core";
+import OverviewTab from '@/components/admin/OverviewTab';
+import { Tabs } from '@mantine/core';
 import {
   IconBrandGoogleAnalytics,
   IconGavel,
   IconLock,
   IconUser,
-} from "@tabler/icons";
-import type { GetServerSideProps } from "next";
-import { prisma } from "src/server/db/client";
-import type { StatsGridProps } from "@/components/admin/OverviewTab";
-import UsersTab from "@/components/admin/UsersTab";
+} from '@tabler/icons';
+import type { GetServerSideProps } from 'next';
+import { prisma } from 'src/server/db/client';
+import type { StatsGridProps } from '@/components/admin/OverviewTab';
+import UsersTab from '@/components/admin/UsersTab';
 
 interface userData {
   name: string;
@@ -17,40 +17,36 @@ interface userData {
   createdAt: string;
 }
 export default function app({ overview, users, lawyers, admins }: props) {
-  // console.log(users[0]?.createdAt?.toISOString());
-  // const usersData: userData[] = users.map((user) => {
-  //   return { name: user?.name, email: user?.email, createdAt: user?.createdAt };
-  // });
   return (
     <>
-      <Tabs defaultValue={"overview"}>
+      <Tabs defaultValue={'overview'}>
         <Tabs.List>
           <Tabs.Tab
-            value="overview"
+            value='overview'
             icon={<IconBrandGoogleAnalytics size={14} />}
           >
             Overview
           </Tabs.Tab>
-          <Tabs.Tab value="users" icon={<IconUser size={14} />}>
+          <Tabs.Tab value='users' icon={<IconUser size={14} />}>
             Users
           </Tabs.Tab>
-          <Tabs.Tab value="lawyers" icon={<IconGavel size={14} />}>
+          <Tabs.Tab value='lawyers' icon={<IconGavel size={14} />}>
             Lawyers
           </Tabs.Tab>
-          <Tabs.Tab value="admins" icon={<IconLock size={14} />}>
+          <Tabs.Tab value='admins' icon={<IconLock size={14} />}>
             Admins
           </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value="overview" pt="xs">
+        <Tabs.Panel value='overview' pt='xs'>
           <OverviewTab data={overview.data} />
         </Tabs.Panel>
-        <Tabs.Panel value="users" pt="xs">
+        <Tabs.Panel value='users' pt='xs'>
           <UsersTab data={users} />
         </Tabs.Panel>
-        <Tabs.Panel value="lawyers" pt="xs">
+        <Tabs.Panel value='lawyers' pt='xs'>
           <UsersTab data={lawyers} />
         </Tabs.Panel>
-        <Tabs.Panel value="admins" pt="xs">
+        <Tabs.Panel value='admins' pt='xs'>
           <UsersTab data={admins} />
         </Tabs.Panel>
       </Tabs>
@@ -61,27 +57,27 @@ export default function app({ overview, users, lawyers, admins }: props) {
 const overviewData: StatsGridProps = {
   data: [
     {
-      title: "NEW USERS",
-      icon: "users",
-      value: "13,456",
+      title: 'NEW USERS',
+      icon: 'users',
+      value: '13,456',
       diff: 34,
     },
     {
-      title: "NEW LAWYERS",
-      icon: "lawyers",
-      value: "4,145",
+      title: 'NEW LAWYERS',
+      icon: 'lawyers',
+      value: '4,145',
       diff: -13,
     },
     {
-      title: "transactions",
-      icon: "transactions",
-      value: "745",
+      title: 'transactions',
+      icon: 'transactions',
+      value: '745',
       diff: 18,
     },
     {
-      title: "Revenue",
-      icon: "revenue",
-      value: "188",
+      title: 'Revenue',
+      icon: 'revenue',
+      value: '188',
       diff: -30,
     },
   ],
@@ -103,19 +99,19 @@ export const getServerSideProps: GetServerSideProps<props> = async () => {
   const overview = overviewData;
   const users = await prisma.user.findMany({
     where: {
-      role: "USER",
+      role: 'USER',
     },
   });
 
   const lawyers = await prisma.user.findMany({
     where: {
-      role: "LAWYER",
+      role: 'LAWYER',
     },
   });
 
   const admins = await prisma.user.findMany({
     where: {
-      role: "ADMIN",
+      role: 'ADMIN',
     },
   });
 
