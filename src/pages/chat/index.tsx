@@ -10,10 +10,31 @@ import {
   TextInput,
   Title,
   ActionIcon,
-} from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { IconSearch, IconSend } from '@tabler/icons';
-import React from 'react';
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import { IconSearch, IconSend } from "@tabler/icons";
+import React, { useEffect, useState } from "react";
+import {
+  useCollection,
+  useCollectionData,
+} from "react-firebase-hooks/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc,
+  limit,
+  where,
+} from "firebase/firestore";
+import { db } from "firebaseconfig";
+import { BiArrowBack } from "react-icons/bi";
+
+const getUser = (users: string[], currentUser: any) =>
+  users?.filter((user) => user !== currentUser);
 
 const useStyles = createStyles((theme) => ({
   selectChat: {
@@ -22,13 +43,13 @@ const useStyles = createStyles((theme) => ({
   },
   wrapper: {
     color: theme.white,
-    '&:hover': {
+    "&:hover": {
       backgroundColor:
-        theme.colorScheme === 'dark'
+        theme.colorScheme === "dark"
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-      cursor: 'pointer',
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+      cursor: "pointer",
     },
   },
   userInfo: {
@@ -40,57 +61,97 @@ const useStyles = createStyles((theme) => ({
     marginLeft: theme.spacing.md,
   },
   link: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
-    textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    textDecoration: "none",
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
     fontWeight: 500,
     fontSize: theme.fontSizes.sm,
 
-    [theme.fn.smallerThan('sm')]: {
+    [theme.fn.smallerThan("sm")]: {
       height: 42,
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
     },
 
     ...theme.fn.hover({
       backgroundColor:
-        theme.colorScheme === 'dark'
+        theme.colorScheme === "dark"
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
     }),
   },
 }));
 
-const Users = ({ onClick }: { onClick: () => void }) => {
+const Users = ({
+  setShowChat,
+  setId,
+}: {
+  setShowChat: React.Dispatch<React.SetStateAction<boolean>>;
+  setId: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const { classes } = useStyles();
+  const [snapshot] = useCollection(collection(db, "chats"));
+  const chats: any = snapshot?.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .filter((c: any) => c.users.includes("name"));
+
+  const GetLastMessage = ({ id }: { id: string }) => {
+    const q = query(
+      collection(db, `chats/${id}/messages`),
+      orderBy("timestamp", "desc"),
+      limit(1)
+    );
+    const [messages] = useCollectionData(q);
+
+    if (messages) {
+      return messages[0]?.sender === "name" ? (
+        <Text color="dimmed" size="sm">
+          Me : {messages[0]?.text.slice(0, 40)}
+        </Text>
+      ) : (
+        <Text color="dimmed" size="sm">
+          {messages[0]?.text.slice(0, 40)}
+        </Text>
+      );
+    } else {
+      return <Text color="dimmed" size="sm"></Text>;
+    }
+  };
 
   return (
-    <ScrollArea scrollbarSize={8} className={classes.selectChat} type='auto'>
-      {[...Array(100)].map((_, index) => (
+    <ScrollArea scrollbarSize={8} className={classes.selectChat} type="auto">
+      {chats?.map((chat: any, index: number) => (
         <Group
-          spacing='md'
+          spacing="md"
+          h="md"
           key={index}
           className={classes.wrapper}
-          onClick={onClick}
+          onClick={() => {
+            setShowChat(true);
+            setId(chat.id);
+          }}
         >
           <Avatar
             size={50}
             radius={40}
             className={classes.avatar}
-            src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
-          />
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80"
+          >
+            {getUser(chat.users, "name")}
+          </Avatar>
           <div className={classes.userInfo} style={{ flexGrow: 1 }}>
-            <Text size='lg' weight={500}>
-              abhiram
+            <Text size="lg" weight={500}>
+              {getUser(chat.users, "name")}
             </Text>
-            <Text color='dimmed' size='sm'>
-              message here
-            </Text>
+            <GetLastMessage id={chat.id} />
           </div>
         </Group>
       ))}
@@ -98,33 +159,26 @@ const Users = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-const Messages = () => {
+const Messages = ({ messages }: { messages: any }) => {
+  const viewport = React.useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (viewport.current)
+      viewport.current.scrollTo({
+        top: viewport.current.scrollHeight,
+        behavior: "smooth",
+      });
+  }, [messages]);
   return (
-    <ScrollArea style={{ flex: 1 }} w='100%' scrollbarSize={8}>
-      <Stack p={'md'} spacing={'sm'}>
-        {[...Array(2)].map((_, index) => (
-          <Msg isReceiver={false} key={index}>
-            Hi there
-          </Msg>
-        ))}
-        {[...Array(2)].map((_, index) => (
-          <Msg isReceiver={true} key={index}>
-            Hi there
-          </Msg>
-        ))}
-        {[...Array(2)].map((_, index) => (
-          <Msg isReceiver={false} key={index}>
-            Hi there
-          </Msg>
-        ))}{' '}
-        {[...Array(2)].map((_, index) => (
-          <Msg isReceiver={false} key={index}>
-            Hi there
-          </Msg>
-        ))}
-        {[...Array(20)].map((_, index) => (
-          <Msg isReceiver={true} key={index}>
-            Hi there
+    <ScrollArea
+      style={{ flex: 1 }}
+      w="100%"
+      scrollbarSize={8}
+      viewportRef={viewport}
+    >
+      <Stack p={"md"} spacing={"sm"}>
+        {messages?.map((msg: any, index: number) => (
+          <Msg isReceiver={msg.sender === "name"} key={index}>
+            {msg.text}
           </Msg>
         ))}
       </Stack>
@@ -137,10 +191,10 @@ const useMsgStyles = createStyles((theme) => ({
     padding: theme.spacing.xs,
     backgroundColor: theme.colors.dark[3],
     borderRadius: theme.radius.md,
-    width: 'fit-content',
+    width: "fit-content",
   },
   receiver: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     backgroundColor: theme.colors.dark[5],
   },
 }));
@@ -160,88 +214,144 @@ const Msg = ({
   );
 };
 
-const Chat = () => {
+const SendMessage = ({ id }: { id: string }) => {
   const { classes, theme } = useStyles();
-  const [showChat, setShowChat] = React.useState(false);
-  const matches = useMediaQuery('(max-width: 800px)');
+  const [value, setValue] = useState("");
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (value) {
+      await addDoc(collection(db, `chats/${id}/messages`), {
+        text: value,
+        sender: "name",
+        timestamp: serverTimestamp(),
+      });
+      setValue("");
+      const docRef = doc(db, "chats", id as string);
+      updateDoc(docRef, { receiverhasread: false });
+    }
+  };
 
   return (
-    <Grid style={{ height: '100vh' }} columns={3} align='stretch' gutter={0}>
+    <Group
+      p="sm"
+      style={{
+        backgroundColor: theme.colors.dark[5],
+      }}
+      w="100%"
+      h={60}
+    >
+      <form onSubmit={handleSubmit} style={{ flex: 1 }}>
+        <Group spacing={5}>
+          <TextInput
+            size="md"
+            radius="md"
+            placeholder=""
+            style={{ flex: 1 }}
+            autoComplete="off"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <ActionIcon
+            type="submit"
+            color={"blue"}
+            variant="filled"
+            size={"xl"}
+            h="100%"
+            radius={"md"}
+          >
+            <IconSend size={20} />
+          </ActionIcon>
+        </Group>
+      </form>
+    </Group>
+  );
+};
+
+const Chat = () => {
+  const { classes, theme } = useStyles();
+  const [value, setValue] = useState("");
+  const [data, setData] = useState<any>();
+  const [id, setId] = useState("0JKzbTCzzLVm5s3leMlk");
+  const [showChat, setShowChat] = React.useState(false);
+  const matches = useMediaQuery("(max-width: 800px)");
+
+  useEffect(() => {
+    try {
+      const docRef = doc(db, "chats", id as string);
+      getDoc(docRef).then((doc1) => {
+        setData(doc1.data());
+      });
+    } catch (error) {
+      return;
+    }
+  }, [id]);
+
+  const q = query(collection(db, `chats/${id}/messages`), orderBy("timestamp"));
+  const [messages] = useCollectionData(q);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(value);
+    setValue("");
+  };
+
+  return (
+    <Grid style={{ height: "100vh" }} columns={3} align="stretch" gutter={0}>
       <Grid.Col
-        style={{ height: '100%' }}
+        style={{ height: "100%" }}
         sm={3}
         md={1}
         lg={1}
         hidden={matches && showChat}
       >
-        <Stack h='100%'>
+        <Stack h="100%">
           <Header height={60}>
-            <Group sx={{ height: '100%' }}>
-              <a href='#' className={classes.link}>
+            <Group sx={{ height: "100%" }}>
+              <a href="#" className={classes.link}>
                 Home
               </a>
             </Group>
           </Header>
           <TextInput
             icon={<IconSearch size={16} />}
-            placeholder='Search'
-            pl='sm'
-            pr='sm'
+            placeholder="Search"
+            pl="sm"
+            pr="sm"
           />
-          <Users onClick={() => setShowChat(true)} />
+          <Users setId={setId} setShowChat={setShowChat} />
         </Stack>
       </Grid.Col>
       <Grid.Col
         sm={3}
         md={2}
         lg={2}
-        h='100%'
+        h="100%"
         style={{ borderLeft: `1px solid ${theme.colors.dark[6]}` }}
         hidden={matches ? !showChat : false}
       >
-        <Stack h='100%'>
-          <Header height={60} pl='md'>
-            <Group spacing={5} align='center' h='100%'>
+        <Stack h="100%">
+          <Header height={60} pl="md">
+            <Group spacing={5} align="center" h="100%">
               <Group>
+                {matches && (
+                  <BiArrowBack
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setShowChat(false)}
+                    size={25}
+                  />
+                )}
                 <Avatar
-                  radius={'xl'}
+                  radius={"xl"}
                   size={50}
-                  src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80"
                 />
-                <Title order={4}>Abhiram</Title>
+                <Title order={4}>{getUser(data?.users, "name")}</Title>
               </Group>
             </Group>
           </Header>
-          <Messages />
-          <Group
-            p='sm'
-            style={{
-              backgroundColor: theme.colors.dark[5],
-            }}
-            w='100%'
-            h={60}
-          >
-            <form style={{ flex: 1 }}>
-              <Group spacing={5}>
-                <TextInput
-                  size='md'
-                  radius='md'
-                  placeholder=''
-                  style={{ flex: 1 }}
-                  autoComplete='off'
-                />
-                <ActionIcon
-                  color={'blue'}
-                  variant='filled'
-                  size={'xl'}
-                  h='100%'
-                  radius={'md'}
-                >
-                  <IconSend size={20} />
-                </ActionIcon>
-              </Group>
-            </form>
-          </Group>
+          <Messages messages={messages} />
+          <SendMessage id={id} />
         </Stack>
       </Grid.Col>
     </Grid>
