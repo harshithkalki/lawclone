@@ -1,6 +1,4 @@
 import {
-  TextInput,
-  PasswordInput,
   Checkbox,
   Anchor,
   Paper,
@@ -11,20 +9,22 @@ import {
   Button,
   Divider,
   Stack,
-} from "@mantine/core";
-import type { FormikErrors } from "formik";
-import { Formik } from "formik";
-import { Form } from "formik";
-import { z } from "zod";
-import { useRouter } from "next/router";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useRef, useState } from "react";
+} from '@mantine/core';
+import type { FormikErrors } from 'formik';
+import { Formik } from 'formik';
+import { Form } from 'formik';
+import { z } from 'zod';
+import { useRouter } from 'next/router';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { useState } from 'react';
 import {
   GoogleButton,
   TwitterButton,
-} from "../../components/Icons/SocialButtons";
-import FormInput from "@/components/FormikCompo/FormikInput";
-import { signIn } from "next-auth/react";
+} from '../../components/Icons/SocialButtons';
+import { getSession, signIn } from 'next-auth/react';
+import { FormikPass, FormikInput } from '@/components/FormikCompo';
+import type { GetServerSideProps } from 'next';
+import { prisma } from '@/server/db/client';
 
 export const AuthError = {
   WRONG_PASSWORD: 1,
@@ -49,13 +49,13 @@ const setFormikErrors = (
       break;
     case AuthError.NO_PASSWORD:
       setErrors({
-        password: "Please Enter the password",
+        password: 'Please Enter the password',
       });
       break;
     case AuthError.WRONG_PASSWORD:
       setErrors({
-        password: "Email or Password are incorrect",
-        email: "Email or Password are incorrect",
+        password: 'Email or Password are incorrect',
+        email: 'Email or Password are incorrect',
       });
       break;
   }
@@ -67,7 +67,7 @@ export default function AuthenticationTitle() {
   return (
     <Container size={420} my={40}>
       <Title
-        align="center"
+        align='center'
         sx={(theme) => ({
           fontFamily: `Greycliff CF, ${theme.fontFamily}`,
           fontWeight: 500,
@@ -75,68 +75,59 @@ export default function AuthenticationTitle() {
       >
         Log in to your account
       </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        Do not have an account yet?{" "}
-        <Anchor<"a">
-          size="sm"
+      <Text color='dimmed' size='sm' align='center' mt={5}>
+        Do not have an account yet?{' '}
+        <Anchor<'a'>
+          size='sm'
           onClick={(event) => {
             event.preventDefault();
-            router.push("/signup");
+            router.push('/signup');
           }}
         >
           Create account
         </Anchor>
       </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: '', password: '' }}
           onSubmit={(values, { setSubmitting, setErrors }) => {
-            // console.log("hello there");
             setLoading(true);
-            signIn("credentials", {
+            signIn('credentials', {
               ...values,
               redirect: false,
             }).then((value) => {
               if (value?.error) setFormikErrors(value?.error, setErrors);
               setLoading(false);
-              if (value?.ok) router.push("/user/user-in");
+              if (value?.ok) router.push('/user/user-in');
               setSubmitting(false);
             });
           }}
           validationSchema={toFormikValidationSchema(
             z.object({
-              email: z.string().email("Please enter valid email"),
+              email: z.string().email('Please enter valid email'),
               password: z.string(),
             })
           )}
         >
-          {({ handleChange, values, handleBlur, errors, touched }) => (
-            <Form style={{ width: "100%" }} id="signinForm">
+          {() => (
+            <Form style={{ width: '100%' }} id='signinForm'>
               <Stack spacing={6}>
                 <Stack spacing={5}>
-                  <FormInput
-                    name="email"
-                    id="email"
-                    type="email"
-                    label="Email"
-                    placeholder="Email"
-                    labelProps={{ htmlFor: "email" }}
+                  <FormikInput
+                    name='email'
+                    id='email'
+                    type='email'
+                    label='Email'
+                    placeholder='Email'
+                    labelProps={{ htmlFor: 'email' }}
                     withAsterisk
                   />
-                  {/* <PasswordField name="password" label="Password" /> */}
-                  <PasswordInput
-                    name="password"
-                    label="Password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={
-                      touched && errors?.password ? errors?.password : undefined
-                    }
-                    placeholder="Your password"
+                  <FormikPass
+                    name='password'
+                    label='Password'
+                    placeholder='Your password'
                     withAsterisk
-                    mt="md"
                   />
                 </Stack>
               </Stack>
@@ -144,18 +135,55 @@ export default function AuthenticationTitle() {
           )}
         </Formik>
 
-        <Group position="apart" mt="lg">
-          <Checkbox label="Remember me" sx={{ lineHeight: 1 }} />
+        <Group position='apart' mt='lg'>
+          <Checkbox label='Remember me' sx={{ lineHeight: 1 }} />
         </Group>
-        <Button fullWidth mt="xl" type="submit" form="signinForm">
+        <Button
+          fullWidth
+          mt='xl'
+          type='submit'
+          form='signinForm'
+          loading={isLoadiing}
+        >
           Sign in
         </Button>
-        <Divider label="Or continue with " labelPosition="center" my="lg" />
-        <Group grow mb="md" mt="md">
-          <GoogleButton radius="xl">Google</GoogleButton>
-          <TwitterButton radius="xl">Twitter</TwitterButton>
+        <Divider label='Or continue with ' labelPosition='center' my='lg' />
+        <Group grow mb='md' mt='md'>
+          <GoogleButton radius='xl'>Google</GoogleButton>
+          <TwitterButton radius='xl'>Twitter</TwitterButton>
         </Group>
       </Paper>
     </Container>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session?.user?.id,
+      },
+    });
+    if (user?.role === 'ADMIN') {
+      return {
+        redirect: {
+          destination: '/admin',
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
+};

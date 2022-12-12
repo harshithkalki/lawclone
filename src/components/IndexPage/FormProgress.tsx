@@ -41,7 +41,6 @@ const useStyles = createStyles((theme) => ({
 export const FormProgress = () => {
   const [active, setActive] = useState(0);
   const { classes } = useStyles();
-  console.log(active);
 
   return (
     <>
