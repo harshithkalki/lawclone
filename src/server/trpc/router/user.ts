@@ -28,13 +28,12 @@ export const userRouter = router({
 
           data: {
             role: 'LAWYER',
-            lawyerDetails: {
+            lawyer: {
               create: {
                 course: input.course,
                 experience: input.experience,
                 institution: input.institution,
                 description: input.description,
-                fullName: input.fullName,
                 image: input.image,
                 services: input.services,
                 expertise: input.expertise,
@@ -52,20 +51,5 @@ export const userRouter = router({
       } catch (error) {
         console.log(error);
       }
-    }),
-  getLawyers: protectedProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const lawyers = await ctx.prisma.lawyer.findMany({
-        take: 6,
-        where: {
-          fullName: {
-            contains: input,
-            mode: 'insensitive',
-          },
-        },
-      });
-      const usernames = lawyers?.map((lawyer) => lawyer.fullName);
-      return { usernames };
     }),
 });
