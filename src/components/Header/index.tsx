@@ -17,7 +17,6 @@ import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
 import SearchBar from '../searchBar';
 import { useTranslation } from 'next-i18next';
-import { useTranslation } from 'next-i18next';
 import { ActionToggle } from '../ThemeSwitcher';
 
 const useStyles = createStyles((theme) => ({
