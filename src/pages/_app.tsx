@@ -1,8 +1,8 @@
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider, useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import type { AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
-import { AppShell, MantineProvider } from '@mantine/core';
+import { AppShell, Center, Loader, MantineProvider } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { HeaderMenu } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -12,8 +12,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const router = useRouter();
-
   return (
     <SessionProvider session={session}>
       <MantineProvider
@@ -24,43 +22,62 @@ const MyApp: AppType<{ session: Session | null }> = ({
         withNormalizeCSS
       >
         <RouterTransition />
-        <AppShell
-          styles={(theme) => ({
-            main: {
-              backgroundColor:
-                theme.colorScheme === 'dark'
-                  ? theme.colors.dark[8]
-                  : theme.colors.gray[0],
-            },
-          })}
-          navbarOffsetBreakpoint='sm'
-          header={<HeaderMenu />}
-          hidden={
-            router.pathname === '/signin' ||
-            router.pathname === '/signup' ||
-            router.pathname === '/chat'
-          }
-          footer={
-            <Footer
-              data={[
-                {
-                  links: [
-                    {
-                      label: 'support',
-                      link: '/',
-                    },
-                  ],
-                  title: 'help',
-                },
-              ]}
-            />
-          }
-        >
+        <AppWrapper>
           <Component {...pageProps} />
-        </AppShell>
+        </AppWrapper>
       </MantineProvider>
     </SessionProvider>
   );
 };
+
+function AppWrapper({ children }: { children: React.ReactNode }) {
+  const { status } = useSession();
+  const router = useRouter();
+
+  if (status === 'loading') {
+    return (
+      <Center h='100vh'>
+        <Loader />
+      </Center>
+    );
+  }
+
+  return (
+    <AppShell
+      styles={(theme) => ({
+        main: {
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+        },
+      })}
+      navbarOffsetBreakpoint='sm'
+      header={<HeaderMenu isAuth={status === 'authenticated'} />}
+      hidden={
+        router.pathname === '/signin' ||
+        router.pathname === '/signup' ||
+        router.pathname === '/chat'
+      }
+      footer={
+        <Footer
+          data={[
+            {
+              links: [
+                {
+                  label: 'support',
+                  link: '/',
+                },
+              ],
+              title: 'help',
+            },
+          ]}
+        />
+      }
+    >
+      {children}
+    </AppShell>
+  );
+}
 
 export default trpc.withTRPC(MyApp);

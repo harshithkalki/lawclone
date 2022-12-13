@@ -99,7 +99,7 @@ export default function AuthenticationTitle() {
             }).then((value) => {
               if (value?.error) setFormikErrors(value?.error, setErrors);
               setLoading(false);
-              if (value?.ok) router.push('/user/user-in');
+              if (value?.ok) router.push('/');
               setSubmitting(false);
             });
           }}

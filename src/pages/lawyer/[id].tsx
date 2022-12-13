@@ -9,11 +9,14 @@ import {
   TextInput,
   Avatar,
   Title,
+  useMantineTheme,
 } from '@mantine/core';
 import { Image, Text, Rating } from '@mantine/core';
 import { IconMapPin, IconSearch, IconUser } from '@tabler/icons';
 
 export default function Lawyer() {
+  const theme = useMantineTheme();
+
   return (
     <>
       <Grid columns={3}>
@@ -28,9 +31,9 @@ export default function Lawyer() {
             <Image
               alt={'avatar'}
               width={180}
-              src='/avatar.jpg'
-              radius={100}
-              mt={'45px'}
+              mt='45px'
+              src='/avatar.png'
+              style={{ width: 'auto' }}
             />
             <Text fz='lg' fw={700} mt={'sm'}>
               Stewie_harshith_kalki
@@ -87,12 +90,6 @@ export default function Lawyer() {
               eiusmod tempor incididunt ut labore et dolore magna aliqua
             </Text>
             <Table w={'90%'} mb={'xl'}>
-              {/* <thead>
-                <tr>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead> */}
               <tbody>
                 <tr>
                   <td style={{ fontWeight: '700' }}>Educational Institute</td>

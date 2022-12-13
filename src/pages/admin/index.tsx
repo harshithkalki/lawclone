@@ -11,11 +11,6 @@ import { prisma } from 'src/server/db/client';
 import type { StatsGridProps } from '@/components/admin/OverviewTab';
 import UsersTab from '@/components/admin/UsersTab';
 
-interface userData {
-  name: string;
-  email: string;
-  createdAt: string;
-}
 export default function app({ overview, users, lawyers, admins }: props) {
   return (
     <>
@@ -119,17 +114,17 @@ export const getServerSideProps: GetServerSideProps<props> = async () => {
     props: {
       overview,
       users: users.map((user) => ({
-        name: user.name,
+        name: user.firstName + ' ' + user.lastName,
         email: user.email,
         createdAt: user.createdAt.toDateString(),
       })),
       lawyers: lawyers.map((lawyer) => ({
-        name: lawyer.name,
+        name: lawyer.firstName + ' ' + lawyer.lastName,
         email: lawyer.email,
         createdAt: lawyer.createdAt.toDateString(),
       })),
       admins: admins.map((admin) => ({
-        name: admin.name,
+        name: admin.firstName + ' ' + admin.lastName,
         email: admin.email,
         createdAt: admin.createdAt.toDateString(),
       })),

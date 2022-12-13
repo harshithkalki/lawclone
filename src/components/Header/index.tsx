@@ -11,10 +11,12 @@ import {
   ScrollArea,
   Autocomplete,
   Select,
+  Avatar,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons';
 import { useRouter } from 'next/router';
+import { UserMenu } from '../UserMenu';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -89,7 +91,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const HeaderMenu = () => {
+export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const { classes, theme } = useStyles();
@@ -121,13 +123,24 @@ export const HeaderMenu = () => {
             />
           </Group>
 
-          <Group className={classes.hiddenMobile}>
+          <Group className={classes.hiddenMobile} hidden={isAuth}>
             <Button variant='default' onClick={login}>
               Log in
             </Button>
             <Button onClick={signup}>Sign up</Button>
             <Select data={['English', 'French']} size='xs' />
           </Group>
+
+          <div style={{ display: !isAuth ? 'none' : 'block' }}>
+            <UserMenu>
+              <Avatar
+                size={'md'}
+                radius='xl'
+                src='/avatar.png'
+                style={{ cursor: 'pointer' }}
+              />
+            </UserMenu>
+          </div>
 
           <Burger
             opened={drawerOpened}

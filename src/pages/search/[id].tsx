@@ -122,7 +122,7 @@ const SearchResult = () => {
               {[...Array(10)].map((_, index) => (
                 <Group className={classes.lawyersInfoBox} key={index}>
                   <Image
-                    src='https://avatars.githubusercontent.com/u/25126261?v=4'
+                    src='/avatar.png'
                     alt='avatar'
                     styles={{
                       image: {

@@ -71,13 +71,13 @@ model Lawyer {
   numofreviews Int?      @default(0)
   image        String?
   price        Int       @default(0)
-  language     language  @default(ENGLISH)
+  language     Language  @default(ENGLISH)
   lawyer       User      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
   orders       Order[]
   reviews      Reviews[]
 }
 
-enum language {
+enum Language {
   ENGLISH
   SPANISH
   FRENCH
@@ -183,7 +183,7 @@ model User {
   createdAt     DateTime  @default(now())
   role          Role      @default(USER)
   balance       Int       @default(0)
-  language      language  @default(ENGLISH)
+  language      Language  @default(ENGLISH)
   accounts      Account[]
   lawyer        Lawyer?
   orders        Order[]

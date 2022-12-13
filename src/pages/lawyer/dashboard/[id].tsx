@@ -2,16 +2,9 @@ import OverviewTab from '@/components/Lawyers/Dashboard/OverviewTab';
 import { Tabs } from '@mantine/core';
 import { IconBrandGoogleAnalytics, IconGavel, IconUser } from '@tabler/icons';
 import type { GetServerSideProps } from 'next';
-import { prisma } from 'src/server/db/client';
 import type { StatsGridProps } from '@/components/Lawyers/Dashboard/OverviewTab';
-import UsersTab from '@/components/admin/UsersTab';
 import { EarningsTab } from '@/components/Lawyers/Dashboard/EarningsTab';
 
-interface userData {
-  name: string;
-  email: string;
-  createdAt: string;
-}
 export default function app({ overview }: props) {
   return (
     <>

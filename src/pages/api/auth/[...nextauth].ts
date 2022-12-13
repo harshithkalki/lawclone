@@ -5,7 +5,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/server/db/client';
 import { env } from '../../../env/server.mjs';
 import bcrypt from 'bcryptjs';
-// import { } from "@/pages/"
+import { AuthError } from '@/pages/signin';
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -37,11 +37,11 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'text', placeholder: 'email@email.com' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const email = credentials?.email;
         const password = credentials?.password;
         if (!password) {
-          throw new Error(`${'kljsdKLS'}`);
+          throw new Error(`${AuthError.NO_PASSWORD}`);
         }
         const user = await prisma.user.findUnique({ where: { email } });
         if (user && user.password) {
@@ -53,10 +53,10 @@ export const authOptions: NextAuthOptions = {
           if (isPasswordMatched) {
             return { ...user, password: undefined };
           } else {
-            throw new Error(`${'kljsdKLS'}`);
+            throw new Error(`${AuthError.WRONG_PASSWORD}`);
           }
         } else {
-          throw new Error(`${'EMAIL_DOESNT_EXIST'}`);
+          throw new Error(`${AuthError.EMAIL_DOESNT_EXIST}`);
         }
       },
     }),

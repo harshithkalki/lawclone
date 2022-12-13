@@ -8,6 +8,9 @@ import {
   Image,
 } from '@mantine/core';
 import { HeroTitle } from '../components/IndexPage/LawyerRequestForm';
+import { prisma } from '@/server/db/client';
+import { getSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
 
 const useStylesFeatureGrid = createStyles((theme) => ({
   wrapper: {
@@ -134,3 +137,27 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const session = await getSession({ req });
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session?.user?.id,
+      },
+    });
+
+    if (user?.role === 'ADMIN') {
+      return {
+        redirect: {
+          destination: '/admin',
+          permanent: false,
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
+};
