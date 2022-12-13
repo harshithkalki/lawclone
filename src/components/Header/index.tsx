@@ -197,15 +197,21 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
           <a href='#' className={classes.link}>
             Academy
           </a>
-
           <Select
-            data={['English', 'French']}
+            data={[
+              { label: 'English', value: 'en' },
+              { label: 'French', value: 'fr' },
+            ]}
+            onChange={(value) => {
+              if (value === 'en') {
+                push('/', '/', { locale: 'en' });
+              } else if (value === 'fr') {
+                push('/', '/', { locale: 'fr' });
+              }
+            }}
+            defaultValue={locale}
             size='xs'
-            maw={'fit-content'}
-            pl='md'
-            mt='sm'
           />
-
           <Divider
             my='sm'
             color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}
