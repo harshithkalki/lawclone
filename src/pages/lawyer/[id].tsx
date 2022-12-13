@@ -9,14 +9,11 @@ import {
   TextInput,
   Avatar,
   Title,
-  useMantineTheme,
 } from '@mantine/core';
 import { Image, Text, Rating } from '@mantine/core';
 import { IconMapPin, IconSearch, IconUser } from '@tabler/icons';
 
 export default function Lawyer() {
-  const theme = useMantineTheme();
-
   return (
     <>
       <Grid columns={3}>

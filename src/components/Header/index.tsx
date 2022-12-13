@@ -131,7 +131,11 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
             <Select data={['English', 'French']} size='xs' />
           </Group>
 
-          <div style={{ display: !isAuth ? 'none' : 'block' }}>
+          <div
+            style={{
+              display: !isAuth ? 'none' : 'block',
+            }}
+          >
             <UserMenu>
               <Avatar
                 size={'md'}

@@ -50,7 +50,7 @@ model Order {
   clientId      String
   createdAt     DateTime    @default(now())
   price         Int
-  transactionId String
+  transactionId String      @default("")
   orderStatus   OrderStatus @default(PENDING)
   client        User        @relation(fields: [clientId], references: [id])
   lawyer        Lawyer      @relation(fields: [lawyerId], references: [id])
@@ -201,7 +201,7 @@ model VerificationToken {
 
 enum OrderStatus {
   PENDING
-  FAILED
+  CANCELLED
   CONFORMED
 }
 

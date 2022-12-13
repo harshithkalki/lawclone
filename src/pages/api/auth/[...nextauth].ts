@@ -6,18 +6,21 @@ import { prisma } from '@/server/db/client';
 import { env } from '../../../env/server.mjs';
 import bcrypt from 'bcryptjs';
 import { AuthError } from '@/pages/signin';
+import type { Role, User } from '@prisma/client';
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, token }) {
       if (token.id && session.user) {
         session.user.id = token.id as string;
+        session.role = token.role as Role;
       }
       return session;
     },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as User).role;
       }
       return token;
     },
