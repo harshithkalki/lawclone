@@ -52,4 +52,20 @@ export const userRouter = router({
         console.log(error);
       }
     }),
+    getLawyers: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const lawyers = await ctx.prisma.user.findMany({
+        take: 6,
+        where: {
+          role: "LAWYER",
+          username: {
+            contains: input,
+            mode: 'insensitive'
+          }
+        },
+      });
+      const usernames = lawyers?.map((lawyer) => lawyer.username);
+      return { usernames };
+    }),
 });

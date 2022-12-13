@@ -86,7 +86,7 @@ export default function Lawyer1({
               <Text fz='lg' fw={700} mt={'sm'}>
                 {fullName}
               </Text>
-              <Rating value={2} mt={'sm'} readOnly />
+              <Rating value={lawyer.rating as number} mt={'sm'} readOnly />
               <Group
                 mt={'sm'}
                 w={'90%'}

@@ -28,16 +28,16 @@ export default function SearchBar() {
     'Sample Lawyer1',
     'Sample Lawyer2',
   ]);
-  //   const lawyernames = trpc.user.getLawyers.useMutation();
+  const lawyernames = trpc.user.getLawyers.useMutation();
 
-  //   async function getLawyersName(i: string) {
-  //     const username = (await lawyernames.mutateAsync(i)).usernames;
-  //     setNames(username);
-  //   }
+  async function getLawyersName(i: string) {
+    const username = (await lawyernames.mutateAsync(i)).usernames;
+    setNames(username);
+  }
 
-  //   useEffect(() => {
-  //     getLawyersName(query);
-  //   }, [query]);
+  useEffect(() => {
+    getLawyersName(query);
+  }, [query]);
 
   const searchItems = [
     'Civil Lawyer',
@@ -71,7 +71,6 @@ export default function SearchBar() {
             mr='5rem'
             value={query}
             onChange={(e) => setQuery(e)}
-            //   className={classes.searchCompo}
             icon={<IconSearch />}
             placeholder='Search your lawyer'
             onSubmit={() => console.log(query)}
@@ -84,11 +83,7 @@ export default function SearchBar() {
         withCloseButton={false}
         onClose={() => setOpened(false)}
       >
-        <Group
-          sx={{ height: '100%' }}
-          spacing={0}
-          //   className={classes.hiddenMobile}
-        >
+        <Group sx={{ height: '100%' }} spacing={0}>
           <Autocomplete
             data={data as string[]}
             size='md'
@@ -96,7 +91,6 @@ export default function SearchBar() {
             mr='5rem'
             value={query}
             onChange={(e) => setQuery(e)}
-            //   className={classes.searchCompo}
             icon={<IconSearch />}
             placeholder='Search your lawyer'
           />
