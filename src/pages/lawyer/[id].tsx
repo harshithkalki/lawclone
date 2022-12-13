@@ -214,7 +214,7 @@ export async function getServerSideProps(ctx: any) {
   const session = await getSession(ctx);
   const u = await prisma?.user.findUnique({
     where: {
-      id: session?.user?.id,
+      id: session ? session?.user?.id : ' ',
     },
   });
   const lawyer = await prisma?.lawyer.findUnique({
@@ -263,7 +263,7 @@ export async function getServerSideProps(ctx: any) {
       isReviewed: false,
       reviews: JSON.parse(JSON.stringify(reviews)),
       username: user?.username ? user.username : '',
-      myName: u && u?.username,
+      myName: u ? u?.username : '',
       fullName: user?.firstName + ' ' + user?.lastName,
     },
   };
