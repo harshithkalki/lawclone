@@ -169,7 +169,7 @@ const IndexPage = () => {
     <div style={{ width: '100%' }}>
       <HeroTitle />
       <FeaturesGrid
-        title={t('index:Find Your Perfect Lawyer')}
+        title={t('Find Your Perfect Lawyer')}
         description={t(
           'This tool has been developed to help individuals and businesses find the right lawyer quickly. We offer the choice between different law firms in a few minutes.'
         )}
