@@ -87,8 +87,7 @@ export default function SearchBar() {
           <Autocomplete
             data={data as string[]}
             size='md'
-            w='40rem'
-            mr='5rem'
+            w='100%'
             value={query}
             onChange={(e) => setQuery(e)}
             icon={<IconSearch />}
