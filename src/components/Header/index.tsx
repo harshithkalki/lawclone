@@ -98,7 +98,7 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const { classes, theme } = useStyles();
-  const { push } = useRouter();
+  const { push, locale } = useRouter();
   const login = () => {
     push('/signin');
   };
@@ -130,7 +130,14 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
               </Button>
               <Button onClick={signup}>Sign up</Button>
             </Group>
-            <Select data={['English', 'French']} size='xs' />
+            <Select
+              data={[
+                { label: 'English', value: 'en' },
+                { label: 'French', value: 'fr' },
+              ]}
+              size='xs'
+              defaultValue={locale}
+            />
           </Group>
           <Group
             sx={{ display: 'flex', justifyContent: 'space-between' }}
