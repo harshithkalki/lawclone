@@ -24,7 +24,7 @@ export default function SearchBar() {
   const { classes } = useStyles();
   const [query, setQuery] = useState('');
   const router = useRouter();
-  const [names, setNames] = useState<String[]>([
+  const [names, setNames] = useState<string[]>([
     'Sample Lawyer1',
     'Sample Lawyer2',
   ]);
