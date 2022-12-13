@@ -19,20 +19,19 @@ import Form1 from './form';
 const useStyles = createStyles((theme) => ({
   mainContent: {
     width: '100%',
-    minHeight: 500,
-    maxHeight: 500,
+    minHeight: 400,
   },
   div: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '1rem',
+    padding: '2rem',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     '&:hover': {
       cursor: 'pointer',
       backgroundColor:
         theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-      borderRadius: '5px',
+      borderRadius: '15px',
       boxShadow: 'inherit',
     },
   },
@@ -41,6 +40,11 @@ const useStyles = createStyles((theme) => ({
 export const FormProgress = () => {
   const [active, setActive] = useState(0);
   const { classes } = useStyles();
+  console.log(active);
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
 
   return (
     <>
@@ -64,8 +68,10 @@ export const FormProgress = () => {
       </Stepper>
 
       <Group position='center' mt='xl' ml='auto' mr='auto'>
-        <Button variant='default'>Back</Button>
-        <Button>Next step</Button>
+        <Button variant='default' onClick={prevStep}>
+          Back
+        </Button>
+        <Button onClick={nextStep}>Next step</Button>
       </Group>
     </>
   );
@@ -81,13 +87,14 @@ const FirstPage = ({
     <>
       <Box
         display='flex'
+        h='100%'
         sx={{ flexDirection: 'column', justifyContent: 'space-evenly' }}
         w='100%'
       >
         <Title sx={{ textAlign: 'center' }} order={3}>
           Is your request private or for business?
         </Title>
-        <Flex justify='space-evenly'>
+        <Flex h='25rem' justify='space-evenly' align='center'>
           <div onClick={() => setActive(1)} className={classes.div}>
             <FaHome size={70} />
             <Title order={2}>PRIVATE</Title>

@@ -17,6 +17,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
+import SearchBar from '../searchBar';
+import { signOut } from 'next-auth/react';
+import { auth } from 'firebaseconfig';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -109,48 +112,48 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
         <Group position='apart' sx={{ height: '100%' }}>
           <Text>Logo</Text>
 
-          <Group
-            sx={{ height: '100%' }}
-            spacing={0}
-            className={classes.hiddenMobile}
-          >
-            <Autocomplete
-              data={[]}
-              size='md'
-              className={classes.searchCompo}
-              icon={<IconSearch />}
-              placeholder='Search your lawyer'
-            />
-          </Group>
-
-          <Group className={classes.hiddenMobile} hidden={isAuth}>
-            <Button variant='default' onClick={login}>
-              Log in
-            </Button>
-            <Button onClick={signup}>Sign up</Button>
+          <Group className={classes.hiddenMobile}>
+            <SearchBar />
+            <div style={{ display: !isAuth ? 'none' : 'block' }}>
+              <UserMenu>
+                <Avatar
+                  size={'md'}
+                  radius='xl'
+                  src='/avatar.png'
+                  style={{ cursor: 'pointer' }}
+                />
+              </UserMenu>
+            </div>
+            <Group hidden={isAuth}>
+              <Button variant='default' onClick={login}>
+                Log in
+              </Button>
+              <Button onClick={signup}>Sign up</Button>
+            </Group>
             <Select data={['English', 'French']} size='xs' />
           </Group>
-
-          <div
-            style={{
-              display: !isAuth ? 'none' : 'block',
-            }}
-          >
-            <UserMenu>
-              <Avatar
-                size={'md'}
-                radius='xl'
-                src='/avatar.png'
-                style={{ cursor: 'pointer' }}
-              />
-            </UserMenu>
-          </div>
-
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
+          <Group
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
             className={classes.hiddenDesktop}
-          />
+          >
+            <SearchBar />
+            <div style={{ display: !isAuth ? 'none' : 'block' }}>
+              <UserMenu>
+                <Avatar
+                  size={'md'}
+                  radius='xl'
+                  src='/avatar.png'
+                  style={{ cursor: 'pointer' }}
+                />
+              </UserMenu>
+            </div>
+            <div></div>
+            <Burger
+              opened={drawerOpened}
+              onClick={toggleDrawer}
+              className={classes.hiddenDesktop}
+            />
+          </Group>
         </Group>
       </Header>
 
@@ -193,7 +196,7 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
             color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}
           />
 
-          <Group position='center' grow pb='xl' px='md'>
+          <Group position='center' hidden={isAuth} grow pb='xl' px='md'>
             <Button variant='default' onClick={login}>
               Log in
             </Button>

@@ -56,7 +56,7 @@ export const userRouter = router({
   getLawyers: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const lawyers = await ctx.prisma.lawyerDetails.findMany({
+      const lawyers = await ctx.prisma.lawyer.findMany({
         take: 6,
         where: {
           fullName: {

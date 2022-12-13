@@ -10,6 +10,7 @@ import {
   TextInput,
   Title,
   ActionIcon,
+  Flex,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconSearch, IconSend } from '@tabler/icons';
@@ -32,6 +33,9 @@ import {
 } from 'firebase/firestore';
 import { db } from 'firebaseconfig';
 import { BiArrowBack } from 'react-icons/bi';
+import { ImAttachment } from 'react-icons/im';
+import { getSession } from 'next-auth/react';
+import { GetServerSidePropsContext } from 'next';
 
 const getUser = (users: string[], currentUser: any) =>
   users?.filter((user) => user !== currentUser);
@@ -87,12 +91,37 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const GetLastMessage = ({ id }: { id: string }) => {
+  const q = query(
+    collection(db, `chats/${id}/messages`),
+    orderBy('timestamp', 'desc'),
+    limit(1)
+  );
+  const [messages] = useCollectionData(q);
+
+  if (messages) {
+    return messages[0]?.sender === 'name' ? (
+      <Text color='dimmed' size='sm'>
+        Me : {messages[0]?.text.slice(0, 40)}
+      </Text>
+    ) : (
+      <Text color='dimmed' size='sm'>
+        {messages[0]?.text.slice(0, 40)}
+      </Text>
+    );
+  } else {
+    return <Text color='dimmed' size='sm'></Text>;
+  }
+};
+
 const Users = ({
   setShowChat,
   setId,
+  name,
 }: {
   setShowChat: React.Dispatch<React.SetStateAction<boolean>>;
   setId: React.Dispatch<React.SetStateAction<string>>;
+  name: string | undefined;
 }) => {
   const { classes } = useStyles();
   const [snapshot] = useCollection(collection(db, 'chats'));
@@ -101,33 +130,11 @@ const Users = ({
       id: doc.id,
       ...doc.data(),
     }))
-    .filter((c: any) => c.users.includes('name'));
-
-  const GetLastMessage = ({ id }: { id: string }) => {
-    const q = query(
-      collection(db, `chats/${id}/messages`),
-      orderBy('timestamp', 'desc'),
-      limit(1)
-    );
-    const [messages] = useCollectionData(q);
-
-    if (messages) {
-      return messages[0]?.sender === 'name' ? (
-        <Text color='dimmed' size='sm'>
-          Me : {messages[0]?.text.slice(0, 40)}
-        </Text>
-      ) : (
-        <Text color='dimmed' size='sm'>
-          {messages[0]?.text.slice(0, 40)}
-        </Text>
-      );
-    } else {
-      return <Text color='dimmed' size='sm'></Text>;
-    }
-  };
+    .filter((c: any) => c.users.includes(name));
 
   return (
     <ScrollArea scrollbarSize={8} className={classes.selectChat} type='auto'>
+      {chats?.length === 0 && <Title order={3}>No chats to show</Title>}
       {chats?.map((chat: any, index: number) => (
         <Group
           spacing='md'
@@ -143,13 +150,13 @@ const Users = ({
             size={50}
             radius={40}
             className={classes.avatar}
-            src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
+            // src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
           >
-            {getUser(chat.users, 'name')}
+            {getUser(chat.users, 'name')[0]?.slice(0, 1).toUpperCase()}
           </Avatar>
           <div className={classes.userInfo} style={{ flexGrow: 1 }}>
             <Text size='lg' weight={500}>
-              {getUser(chat.users, 'name')}
+              {getUser(chat.users, name)}
             </Text>
             <GetLastMessage id={chat.id} />
           </div>
@@ -268,13 +275,23 @@ const SendMessage = ({ id }: { id: string }) => {
   );
 };
 
-const Chat = () => {
+const Chat = ({ name }: { name: string | undefined }) => {
   const { classes, theme } = useStyles();
   const [value, setValue] = useState('');
   const [data, setData] = useState<any>();
-  const [id, setId] = useState('0JKzbTCzzLVm5s3leMlk');
   const [showChat, setShowChat] = React.useState(false);
   const matches = useMediaQuery('(max-width: 800px)');
+
+  const [snapshot] = useCollection(collection(db, 'chats'));
+  const chats: any = snapshot?.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .filter((c: any) => c.users.includes('name'));
+  console.log(chats);
+
+  const [id, setId] = useState(' ');
 
   useEffect(() => {
     try {
@@ -318,7 +335,7 @@ const Chat = () => {
             pl='sm'
             pr='sm'
           />
-          <Users setId={setId} setShowChat={setShowChat} />
+          <Users name={name} setId={setId} setShowChat={setShowChat} />
         </Stack>
       </Grid.Col>
       <Grid.Col
@@ -329,32 +346,56 @@ const Chat = () => {
         style={{ borderLeft: `1px solid ${theme.colors.dark[6]}` }}
         hidden={matches ? !showChat : false}
       >
-        <Stack h='100%'>
-          <Header height={60} pl='md'>
-            <Group spacing={5} align='center' h='100%'>
-              <Group>
-                {matches && (
-                  <BiArrowBack
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setShowChat(false)}
-                    size={25}
-                  />
-                )}
-                <Avatar
-                  radius={'xl'}
-                  size={50}
-                  src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
-                />
-                <Title order={4}>{getUser(data?.users, 'name')}</Title>
+        {!data ? (
+          <Flex direction='column' h='100%' justify='center' align='center'>
+            <ImAttachment size={40} />
+            <Title order={1}>Select a Conversation</Title>
+          </Flex>
+        ) : (
+          <Stack h='100%'>
+            <Header height={60} pl='md'>
+              <Group spacing={5} align='center' h='100%'>
+                <Group>
+                  {matches && (
+                    <BiArrowBack
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setShowChat(false)}
+                      size={25}
+                    />
+                  )}
+                  <Avatar
+                    radius={'xl'}
+                    size={50}
+                    // src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80'
+                  >
+                    {getUser(data?.users, 'name')[0]?.slice(0, 1).toUpperCase()}
+                  </Avatar>
+                  <Title order={4}>{getUser(data?.users, name)}</Title>
+                </Group>
               </Group>
-            </Group>
-          </Header>
-          <Messages messages={messages} />
-          <SendMessage id={id} />
-        </Stack>
+            </Header>
+            <Messages messages={messages} />
+            <SendMessage id={id} />
+          </Stack>
+        )}
       </Grid.Col>
     </Grid>
   );
 };
 
 export default Chat;
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const session = await getSession(ctx);
+  const user = await prisma?.user.findUnique({
+    where: {
+      id: session?.user?.id,
+    },
+  });
+
+  return {
+    props: {
+      name: user?.username,
+    },
+  };
+}

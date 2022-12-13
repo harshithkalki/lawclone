@@ -31,7 +31,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 };
 
 function AppWrapper({ children }: { children: React.ReactNode }) {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
+  console.log(session);
+
   const router = useRouter();
 
   if (status === 'loading') {

@@ -159,6 +159,7 @@ export default function AuthenticationTitle() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
+  console.log(session);
 
   if (session) {
     const user = await prisma.user.findUnique({

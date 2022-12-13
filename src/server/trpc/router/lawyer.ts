@@ -1,4 +1,4 @@
-import { Language } from '@prisma/client';
+import { language } from '@prisma/client';
 import { z } from 'zod';
 import { router, protectedProcedure } from '../trpc';
 
@@ -13,7 +13,7 @@ export const lawyerInput = z.object({
   state: z.string(),
   image: z.string(),
   price: z.number(),
-  language: z.nativeEnum(Language).optional(),
+  language: z.nativeEnum(language).optional(),
 });
 
 export const lawyerRouter = router({
@@ -37,6 +37,14 @@ export const lawyerRouter = router({
             language: input.language,
           },
         });
+        await ctx.prisma.user.update({
+          where: {
+            id: ctx.session.user.id
+          },
+          data: {
+            role: "LAWYER"
+          }
+        })
         return {
           message: 'Success',
         };
