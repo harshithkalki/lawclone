@@ -36,8 +36,6 @@ export default function Lawyer1({
 }) {
   const router = useRouter();
   const { data: session } = useSession();
-  console.log(session);
-  console.log(myName);
 
   const [snapshot] = useCollection(collection(db, 'chats'));
   const handleClick = async () => {
@@ -249,7 +247,7 @@ export async function getServerSideProps(ctx: any) {
         lawyer: lawyer,
         isReviewed: true,
         reviews: JSON.parse(JSON.stringify(reviews)),
-        username: user?.username ? user.username : '',
+        username: user?.username ? user.username : ' ',
         fullName: user?.firstName + ' ' + user?.lastName,
       },
     };
@@ -263,7 +261,7 @@ export async function getServerSideProps(ctx: any) {
       isReviewed: false,
       reviews: JSON.parse(JSON.stringify(reviews)),
       username: user?.username ? user.username : '',
-      myName: u ? u?.username : '',
+      myName: u ? u?.username : ' ',
       fullName: user?.firstName + ' ' + user?.lastName,
     },
   };
