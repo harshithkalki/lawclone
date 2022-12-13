@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
 import SearchBar from '../searchBar';
 import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { ActionToggle } from '../ThemeSwitcher';
 
 const useStyles = createStyles((theme) => ({
@@ -129,19 +130,12 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
               </Button>
               <Button onClick={signup}>Sign up</Button>
             </Group>
-<<<<<<< Updated upstream
-=======
             <ActionToggle />
->>>>>>> Stashed changes
             <Select
               data={[
                 { label: 'English', value: 'en' },
                 { label: 'French', value: 'fr' },
               ]}
-<<<<<<< Updated upstream
-              size='xs'
-              defaultValue={locale}
-=======
               onChange={(value) => {
                 if (value === 'en') {
                   push('/', '/', { locale: 'en' });
@@ -151,7 +145,6 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
               }}
               defaultValue={locale}
               size='xs'
->>>>>>> Stashed changes
             />
           </Group>
           <Group
