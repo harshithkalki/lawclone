@@ -4,12 +4,15 @@ import {
   Container,
   ActionIcon,
   Group,
+  Button,
+  Anchor,
 } from '@mantine/core';
 import {
   IconBrandTwitter,
   IconBrandYoutube,
   IconBrandInstagram,
 } from '@tabler/icons';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -26,7 +29,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   logo: {
-    maxWidth: 200,
+    maxWidth: 300,
 
     [theme.fn.smallerThan('sm')]: {
       display: 'flex',
@@ -122,6 +125,7 @@ interface FooterLinksProps {
 
 export function Footer({ data }: FooterLinksProps) {
   const { classes } = useStyles();
+  const router = useRouter();
 
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
@@ -148,15 +152,25 @@ export function Footer({ data }: FooterLinksProps) {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          <Text size='xs' color='dimmed' className={classes.description}>
-            Build fully functional accessible web applications faster than ever
+          <Text size='md' color='dimmed' className={classes.description}>
+            Are you a lawyer?
+            <Anchor<'a'>
+              size='sm'
+              ml='10px'
+              onClick={(event) => {
+                event.preventDefault();
+                router.push('/lawyer/new');
+              }}
+            >
+              Fill your details
+            </Anchor>
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
       <Container className={classes.afterFooter}>
         <Text color='dimmed' size='sm'>
-          © 2020 mantine.dev. All rights reserved.
+          © 2022 lawyer-web. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position='right' noWrap>

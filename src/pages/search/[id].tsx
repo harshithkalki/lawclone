@@ -188,8 +188,6 @@ export default function SearchResult({ lawyers }: { lawyers: any }) {
   );
 }
 
-// export default SearchResult;
-
 export const getServerSideProps: GetServerSideProps = async () => {
   const lawyers1 = await prisma?.lawyer.findMany();
   const users = await prisma?.user.findMany({

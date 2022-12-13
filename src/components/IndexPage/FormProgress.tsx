@@ -70,8 +70,10 @@ export const FormProgress = () => {
       </Stepper>
 
       <Group position='center' mt='xl' ml='auto' mr='auto'>
-        <Button variant='default'>{t('Back')}</Button>
-        <Button>{t('Next step')}</Button>
+        <Button variant='default' onClick={prevStep}>
+          {t('Back')}
+        </Button>
+        <Button onClick={nextStep}>{t('Next step')}</Button>
       </Group>
     </>
   );
