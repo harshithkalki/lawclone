@@ -12,7 +12,7 @@ import { prisma } from '@/server/db/client';
 import { getSession } from 'next-auth/react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const useStylesFeatureGrid = createStyles((theme) => ({

@@ -1,5 +1,5 @@
 import { createStyles, Container, Box, Paper } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { FormProgress } from './FormProgress';
 const BREAKPOINT = '@media (max-width: 755px)';
 

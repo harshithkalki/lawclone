@@ -15,7 +15,7 @@ import {
   IconArrowUpRight,
   IconArrowDownRight,
 } from '@tabler/icons';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Graph } from '../Graph';
 
 const useStyles = createStyles((theme) => ({

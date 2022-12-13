@@ -2,7 +2,7 @@ import { Stack, Radio } from '@mantine/core';
 import { Formik, Form } from 'formik';
 import React from 'react';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import FormInput from '../FormikCompo/FormikInput';
