@@ -255,13 +255,15 @@ export async function getServerSideProps(ctx: any) {
     };
   }
 
+  console.log(lawyer, reviews, user?.username, u?.username);
+
   return {
     props: {
       lawyer: JSON.parse(JSON.stringify(lawyer)),
       isReviewed: false,
       reviews: JSON.parse(JSON.stringify(reviews)),
       username: user?.username ? user.username : '',
-      myName: u?.username,
+      myName: u && u?.username,
       fullName: user?.firstName + ' ' + user?.lastName,
     },
   };
