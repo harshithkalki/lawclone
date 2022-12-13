@@ -13,6 +13,7 @@ import { getSession } from 'next-auth/react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const useStylesFeatureGrid = createStyles((theme) => ({
   wrapper: {
@@ -180,8 +181,9 @@ const IndexPage = () => {
 export default IndexPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req, res } = context;
+  const { req } = context;
   const session = await getSession({ req });
+
   if (session) {
     const user = await prisma.user.findUnique({
       where: {
@@ -198,7 +200,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
   }
+
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(context.locale || 'en', [
+        'common',
+        'index',
+      ])),
+    },
   };
 };

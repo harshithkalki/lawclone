@@ -37,6 +37,7 @@ export const lawyerRouter = router({
             language: input.language,
           },
         });
+
         await ctx.prisma.user.update({
           where: {
             id: ctx.session.user.id,

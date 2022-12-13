@@ -9,17 +9,15 @@ import {
   Burger,
   Drawer,
   ScrollArea,
-  Autocomplete,
   Select,
   Avatar,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconSearch } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
 import SearchBar from '../searchBar';
-import { signOut } from 'next-auth/react';
-import { auth } from 'firebaseconfig';
+import { useTranslation } from 'next-i18next';
+import { ActionToggle } from '../ThemeSwitcher';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -105,12 +103,13 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
   const signup = () => {
     push('/signup');
   };
+  const { t } = useTranslation('common');
 
   return (
     <Box>
       <Header height={60} px='md'>
         <Group position='apart' sx={{ height: '100%' }}>
-          <Text>Logo</Text>
+          <Text>Vocatum</Text>
 
           <Group className={classes.hiddenMobile}>
             <SearchBar />
@@ -130,13 +129,29 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
               </Button>
               <Button onClick={signup}>Sign up</Button>
             </Group>
+<<<<<<< Updated upstream
+=======
+            <ActionToggle />
+>>>>>>> Stashed changes
             <Select
               data={[
                 { label: 'English', value: 'en' },
                 { label: 'French', value: 'fr' },
               ]}
+<<<<<<< Updated upstream
               size='xs'
               defaultValue={locale}
+=======
+              onChange={(value) => {
+                if (value === 'en') {
+                  push('/', '/', { locale: 'en' });
+                } else if (value === 'fr') {
+                  push('/', '/', { locale: 'fr' });
+                }
+              }}
+              defaultValue={locale}
+              size='xs'
+>>>>>>> Stashed changes
             />
           </Group>
           <Group
