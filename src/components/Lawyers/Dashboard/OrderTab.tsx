@@ -19,7 +19,7 @@ import {
 } from '@tabler/icons';
 import { ActionIcon } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import type { Order } from '@/pages/lawyer/dashboard/[id]';
+import type { OrdersType } from '@/pages/lawyer/dashboard/[id]';
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -45,10 +45,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type RowData = Order;
+type RowData = OrdersType;
 
 interface TableSortProps {
-  data: Order[];
+  data: OrdersType[];
 }
 
 interface ThProps {

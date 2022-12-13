@@ -60,7 +60,7 @@ const overviewData: StatsGridProps = {
   ],
 };
 
-interface OrdersType {
+export interface OrdersType {
   client: string;
   date: string;
   status: string;
