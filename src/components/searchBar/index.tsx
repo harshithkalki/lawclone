@@ -4,6 +4,7 @@ import { IconSearch } from '@tabler/icons';
 import { trpc } from '@/utils/trpc';
 import { ActionIcon } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
 const useStyles = createStyles((theme) => ({
   hiddenMobile: {
@@ -29,6 +30,7 @@ export default function SearchBar() {
     'Sample Lawyer2',
   ]);
   const lawyernames = trpc.user.getLawyers.useMutation();
+  const { locale } = useRouter();
 
   async function getLawyersName(i: string) {
     const username = (await lawyernames.mutateAsync(i)).usernames;
@@ -48,7 +50,19 @@ export default function SearchBar() {
     'Medical Lawyer',
     'Legal Advices',
   ];
-  const data = [...searchItems, ...names];
+
+  const searchItemsFr = [
+    'Avocat Civil',
+    'Avocat Criminel',
+    'Divorce',
+    'Avocat',
+    'Avocat Fiscal',
+    'Avocat Médical',
+    'Conseils Juridiques',
+  ];
+
+  const data = [...(locale === 'fr' ? searchItemsFr : searchItems), ...names];
+  const { t } = useTranslation('common');
 
   return (
     <>
@@ -72,7 +86,7 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e)}
             icon={<IconSearch />}
-            placeholder='Search your lawyer'
+            placeholder={t('Search your lawyer')!}
             onSubmit={() => console.log(query)}
           />
           <button type='submit' hidden></button>
@@ -91,7 +105,7 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e)}
             icon={<IconSearch />}
-            placeholder='Search your lawyer'
+            placeholder={t('Search your lawyer')!}
           />
         </Group>
       </Modal>

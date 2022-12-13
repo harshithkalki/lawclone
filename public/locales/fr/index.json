@@ -1,6 +1,4 @@
 {
-  "Name": "Nom",
-  "Email": "Email",
   "CreatedAt": "CreatedAt",
   "Users": "Utilisateurs",
   "Search by any field": "Recherchez par n'importe quel champ",
@@ -18,5 +16,6 @@
   "Submit": "Soumettre",
   "firstname": "Prénom",
   "Postal Code": "Code postal",
-  "Telephone": "Téléphone"
+  "Telephone": "Téléphone",
+  "Find the best lawyer for you": "Trouvez le meilleur avocat pour vous"
 }

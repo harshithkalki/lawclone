@@ -29,13 +29,12 @@ import {
   serverTimestamp,
   updateDoc,
   limit,
-  where,
 } from 'firebase/firestore';
 import { db } from 'firebaseconfig';
 import { BiArrowBack } from 'react-icons/bi';
 import { ImAttachment } from 'react-icons/im';
 import { getSession } from 'next-auth/react';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 
 const getUser = (users: string[], currentUser: any) =>
   users?.filter((user) => user !== currentUser);
@@ -343,7 +342,13 @@ const Chat = ({ name }: { name: string | undefined }) => {
         md={2}
         lg={2}
         h='100%'
-        style={{ borderLeft: `1px solid ${theme.colors.dark[6]}` }}
+        style={{
+          borderLeft: `1px solid ${
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[6]
+              : theme.colors.dark[0]
+          }`,
+        }}
         hidden={matches ? !showChat : false}
       >
         {!data ? (

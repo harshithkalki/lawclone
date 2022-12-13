@@ -9,17 +9,15 @@ import {
   Burger,
   Drawer,
   ScrollArea,
-  Autocomplete,
   Select,
   Avatar,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconSearch } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
 import SearchBar from '../searchBar';
-import { signOut } from 'next-auth/react';
-import { auth } from 'firebaseconfig';
+import { useTranslation } from 'next-i18next';
+import { ActionToggle } from '../ThemeSwitcher';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -98,19 +96,20 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const { classes, theme } = useStyles();
-  const { push } = useRouter();
+  const { push, locale } = useRouter();
   const login = () => {
     push('/signin');
   };
   const signup = () => {
     push('/signup');
   };
+  const { t } = useTranslation('common');
 
   return (
     <Box>
       <Header height={60} px='md'>
         <Group position='apart' sx={{ height: '100%' }}>
-          <Text>Logo</Text>
+          <Text>Vocatum</Text>
 
           <Group className={classes.hiddenMobile}>
             <SearchBar />
@@ -130,7 +129,22 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
               </Button>
               <Button onClick={signup}>Sign up</Button>
             </Group>
-            <Select data={['English', 'French']} size='xs' />
+            <ActionToggle />
+            <Select
+              data={[
+                { label: 'English', value: 'en' },
+                { label: 'French', value: 'fr' },
+              ]}
+              onChange={(value) => {
+                if (value === 'en') {
+                  push('/', '/', { locale: 'en' });
+                } else if (value === 'fr') {
+                  push('/', '/', { locale: 'fr' });
+                }
+              }}
+              defaultValue={locale}
+              size='xs'
+            />
           </Group>
           <Group
             sx={{ display: 'flex', justifyContent: 'space-between' }}
@@ -147,7 +161,8 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
                 />
               </UserMenu>
             </div>
-            <div></div>
+
+            <ActionToggle />
             <Burger
               opened={drawerOpened}
               onClick={toggleDrawer}
@@ -182,15 +197,21 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
           <a href='#' className={classes.link}>
             Academy
           </a>
-
           <Select
-            data={['English', 'French']}
+            data={[
+              { label: 'English', value: 'en' },
+              { label: 'French', value: 'fr' },
+            ]}
+            onChange={(value) => {
+              if (value === 'en') {
+                push('/', '/', { locale: 'en' });
+              } else if (value === 'fr') {
+                push('/', '/', { locale: 'fr' });
+              }
+            }}
+            defaultValue={locale}
             size='xs'
-            maw={'fit-content'}
-            pl='md'
-            mt='sm'
           />
-
           <Divider
             my='sm'
             color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}

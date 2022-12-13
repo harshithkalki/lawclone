@@ -2,39 +2,55 @@ import { SessionProvider, useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import type { AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
-import { AppShell, Center, Loader, MantineProvider } from '@mantine/core';
+import type { ColorScheme } from '@mantine/core';
+import {
+  AppShell,
+  Center,
+  ColorSchemeProvider,
+  Loader,
+  MantineProvider,
+} from '@mantine/core';
 import { useRouter } from 'next/router';
 import { HeaderMenu } from '../components/Header';
 import { Footer } from '../components/Footer';
 import RouterTransition from '@/components/RouterTransition';
 import { appWithTranslation } from 'next-i18next';
+import { useState } from 'react';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
   return (
     <SessionProvider session={session}>
-      <MantineProvider
-        theme={{
-          colorScheme: 'dark',
-        }}
-        withGlobalStyles
-        withNormalizeCSS
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        <RouterTransition />
-        <AppWrapper>
-          <Component {...pageProps} />
-        </AppWrapper>
-      </MantineProvider>
+        <MantineProvider
+          theme={{
+            colorScheme,
+          }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <RouterTransition />
+
+          <AppWrapper>
+            <Component {...pageProps} />
+          </AppWrapper>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </SessionProvider>
   );
 };
 
 function AppWrapper({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-  console.log(session);
-
+  const { status } = useSession();
   const router = useRouter();
 
   if (status === 'loading') {

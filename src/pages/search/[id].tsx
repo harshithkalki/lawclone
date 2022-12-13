@@ -14,10 +14,10 @@ import {
   Drawer,
   Button,
 } from '@mantine/core';
-import { Lawyer } from '@prisma/client';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { prisma } from '@/server/db/client';
 
 const useStyles = createStyles((theme) => ({
   hiddenDesktop: {
@@ -195,6 +195,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       role: 'LAWYER',
     },
   });
+
   const lawyers = lawyers1?.map((l) => {
     const c = users?.find((g) => g.id === l.lawyerId);
     return {

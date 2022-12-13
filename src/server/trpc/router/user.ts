@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { router, protectedProcedure } from '../trpc';
+import { router, protectedProcedure, publicProcedure } from '../trpc';
 
 export const userRouter = router({
   submitLawyerForm: protectedProcedure
@@ -52,17 +52,17 @@ export const userRouter = router({
         console.log(error);
       }
     }),
-    getLawyers: protectedProcedure
+  getLawyers: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       const lawyers = await ctx.prisma.user.findMany({
         take: 6,
         where: {
-          role: "LAWYER",
+          role: 'LAWYER',
           username: {
             contains: input,
-            mode: 'insensitive'
-          }
+            mode: 'insensitive',
+          },
         },
       });
       const usernames = lawyers?.map((lawyer) => lawyer.username);

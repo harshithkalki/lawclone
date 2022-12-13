@@ -6,6 +6,8 @@ import router from 'next/router';
 export function UserMenu({ children }: { children: React.ReactNode }) {
   const { data } = useSession();
 
+  console.log(data?.role);
+
   return (
     <Group position='center'>
       <Menu withArrow position='bottom' transition='pop'>
@@ -14,7 +16,7 @@ export function UserMenu({ children }: { children: React.ReactNode }) {
           <Menu.Item
             icon={<IconDashboard size={14} stroke={1.5} />}
             onClick={() => {
-              router.push('/lawyer/dashboard');
+              router.push(`/lawyer/dashboard/${data?.user?.id}`);
             }}
             hidden={!(data?.role === 'LAWYER')}
           >
