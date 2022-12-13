@@ -171,7 +171,7 @@ const IndexPage = () => {
       <FeaturesGrid
         title={t('Below find your perfect lawyer')}
         description={t(
-          'em ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore'
+          'This tool has been developed to help individuals and businesses find the right lawyer quickly. We offer the choice between different law firms in a few minutes.'
         )}
       />
     </div>
