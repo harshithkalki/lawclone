@@ -161,7 +161,8 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
                 />
               </UserMenu>
             </div>
-            <div></div>
+
+            <ActionToggle />
             <Burger
               opened={drawerOpened}
               onClick={toggleDrawer}
