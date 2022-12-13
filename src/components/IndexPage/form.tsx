@@ -1,6 +1,8 @@
-import { Button, Flex, Checkbox, Stack, Radio } from '@mantine/core';
+import { Stack, Radio } from '@mantine/core';
 import { Formik, Form } from 'formik';
+import React from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import FormInput from '../FormikCompo/FormikInput';
@@ -33,6 +35,8 @@ export default function Form1({
     email: '',
   };
 
+  const { t } = useTranslation('index');
+
   return (
     <Formik
       initialValues={initialValues}
@@ -60,23 +64,23 @@ export default function Form1({
             <FormInput
               name='firstname'
               id='firstname'
-              placeholder='First Name'
+              placeholder={t('firstname')!}
             />
             <FormInput name='lastname' id='lastname' placeholder='Last name' />
             <FormInput name='city' id='city' placeholder='City' />
             <FormInput
               name='postalcode'
               id='postalcode'
-              placeholder='Postal Code'
+              placeholder={t('Postal Code')!}
             />
             <FormInput name='pays' id='pays' placeholder='Pays' />
             <FormInput
               name='telephone'
               id='telephone'
-              placeholder='Telephone'
+              placeholder={t('Telephone')!}
               type='number'
             />
-            <FormInput name='email' id='email' placeholder='E-mail' />
+            <FormInput name='email' id='email' placeholder={t('Email')!} />
           </Stack>
         </Form>
       )}

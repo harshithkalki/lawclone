@@ -1,0 +1,22 @@
+{
+  "Name": "Nom",
+  "Email": "Email",
+  "CreatedAt": "CreatedAt",
+  "Users": "Utilisateurs",
+  "Search by any field": "Recherchez par n'importe quel champ",
+  "Nothing found": "Aucun résultat trouvé",
+  "Find Your Perfect Lawyer": "Trouver votre avocat idéal",
+  "Is your request private or for business?": "Votre demande est-elle privée ou pour les affaires?",
+  "PRIVATE": "PRIVÉ",
+  "BUSINESS": "AFFAIRES",
+  "What do you need help with?": "Que recherchez-vous?",
+  "Where are you looking for a lawyer?": "Où recherchez-vous un avocat?",
+  "Other Comments, Deadline": "Autres commentaires, date limite",
+  "Start": "Commencer",
+  "Next step": "Étape suivante",
+  "Back": "Retour",
+  "Submit": "Soumettre",
+  "firstname": "Prénom",
+  "Postal Code": "Code postal",
+  "Telephone": "Téléphone"
+}

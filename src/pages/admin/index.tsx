@@ -1,3 +1,8 @@
+import { useTranslation } from 'next-i18next';
+import type { GetServerSideProps } from 'next';
+import { prisma } from 'src/server/db/client';
+import type { StatsGridProps } from '@/components/admin/OverviewTab';
+import UsersTab from '@/components/admin/UsersTab';
 import OverviewTab from '@/components/admin/OverviewTab';
 import { Tabs } from '@mantine/core';
 import {
@@ -6,12 +11,17 @@ import {
   IconLock,
   IconUser,
 } from '@tabler/icons';
-import type { GetServerSideProps } from 'next';
-import { prisma } from 'src/server/db/client';
-import type { StatsGridProps } from '@/components/admin/OverviewTab';
-import UsersTab from '@/components/admin/UsersTab';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function app({ overview, users, lawyers, admins }: props) {
+interface props {
+  overview: StatsGridProps;
+  users: User[];
+  lawyers: User[];
+  admins: User[];
+}
+
+export default function App({ overview, users, lawyers, admins }: props) {
+  const { t } = useTranslation('admin');
   return (
     <>
       <Tabs defaultValue={'overview'}>
@@ -20,16 +30,16 @@ export default function app({ overview, users, lawyers, admins }: props) {
             value='overview'
             icon={<IconBrandGoogleAnalytics size={14} />}
           >
-            Overview
+            {t('overview')}
           </Tabs.Tab>
           <Tabs.Tab value='users' icon={<IconUser size={14} />}>
-            Users
+            {t('users')}
           </Tabs.Tab>
           <Tabs.Tab value='lawyers' icon={<IconGavel size={14} />}>
-            Lawyers
+            {t('lawyers')}
           </Tabs.Tab>
           <Tabs.Tab value='admins' icon={<IconLock size={14} />}>
-            Admins
+            {t('admins')}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value='overview' pt='xs'>
@@ -49,7 +59,7 @@ export default function app({ overview, users, lawyers, admins }: props) {
   );
 }
 
-const overviewData: StatsGridProps = {
+const overviewDataEn: StatsGridProps = {
   data: [
     {
       title: 'NEW USERS',
@@ -78,20 +88,47 @@ const overviewData: StatsGridProps = {
   ],
 };
 
-interface props {
-  overview: StatsGridProps;
-  users: User[];
-  lawyers: User[];
-  admins: User[];
-}
+const overviewDataFr: StatsGridProps = {
+  data: [
+    {
+      title: 'NOUVEAUX UTILISATEURS',
+      icon: 'users',
+      value: '13,456',
+      diff: 34,
+    },
+    {
+      title: 'NOUVEAUX AVOCATS',
+      icon: 'lawyers',
+      value: '4,145',
+      diff: -13,
+    },
+    {
+      title: 'transactions',
+      icon: 'transactions',
+      value: '745',
+      diff: 18,
+    },
+    {
+      title: 'Revenue',
+      icon: 'revenue',
+      value: '188',
+      diff: -30,
+    },
+  ],
+};
+
+// convert above overviewData title property to french
 
 export interface User {
   name: string;
   email: string;
   createdAt: string;
 }
-export const getServerSideProps: GetServerSideProps<props> = async () => {
-  const overview = overviewData;
+
+export const getServerSideProps: GetServerSideProps<props> = async ({
+  locale,
+}) => {
+  const overview = locale === 'fr' ? overviewDataFr : overviewDataEn;
   const users = await prisma.user.findMany({
     where: {
       role: 'USER',
@@ -128,6 +165,7 @@ export const getServerSideProps: GetServerSideProps<props> = async () => {
         email: admin.email,
         createdAt: admin.createdAt.toDateString(),
       })),
+      ...(await serverSideTranslations(locale ? locale : 'en', ['admin'])),
     },
   };
 };

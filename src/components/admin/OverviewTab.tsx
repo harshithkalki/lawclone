@@ -15,6 +15,7 @@ import {
   IconArrowUpRight,
   IconArrowDownRight,
 } from '@tabler/icons';
+import { useTranslation } from 'react-i18next';
 import { Graph } from '../Graph';
 
 const useStyles = createStyles((theme) => ({
@@ -67,6 +68,7 @@ export interface StatsGridProps {
 
 export default function OverviewTab({ data }: StatsGridProps) {
   const { classes } = useStyles();
+  const { t } = useTranslation('admin');
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon];
     const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
@@ -94,11 +96,12 @@ export default function OverviewTab({ data }: StatsGridProps) {
         </Group>
 
         <Text size='xs' color='dimmed' mt={7}>
-          Compared to previous month
+          {t('Compared to previous month')}
         </Text>
       </Paper>
     );
   });
+
   return (
     <>
       <div className={classes.root}>
@@ -123,7 +126,7 @@ export default function OverviewTab({ data }: StatsGridProps) {
           <Graph data={usersGdata} color={'#e1eb34'} />
           <Center>
             <Text color='dimmed' size='md' transform='uppercase' weight={700}>
-              New Users
+              {t('New users')}
             </Text>
           </Center>
         </Container>
@@ -132,7 +135,7 @@ export default function OverviewTab({ data }: StatsGridProps) {
           <Graph data={lawyersGdata} color={'#03fcf8'} />
           <Center>
             <Text color='dimmed' size='md' transform='uppercase' weight={700}>
-              New Lawyers
+              {t('New lawyers')}
             </Text>
           </Center>
         </Container>
@@ -141,7 +144,7 @@ export default function OverviewTab({ data }: StatsGridProps) {
           <Graph data={transactionsGdata} color={'#eb8334'} />
           <Center>
             <Text color='dimmed' size='md' transform='uppercase' weight={700}>
-              Transaction
+              {t('New transaction')}
             </Text>
           </Center>
         </Container>
@@ -150,7 +153,7 @@ export default function OverviewTab({ data }: StatsGridProps) {
           <Graph data={RevenueGdata} color={'#34eb8f'} />
           <Center>
             <Text color='dimmed' size='md' transform='uppercase' weight={700}>
-              Revenue
+              {t('New revenue')}
             </Text>
           </Center>
         </Container>

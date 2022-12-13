@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   createStyles,
   Table,
@@ -8,31 +8,31 @@ import {
   Text,
   Center,
   TextInput,
-} from "@mantine/core";
-import { keys } from "@mantine/utils";
+} from '@mantine/core';
+import { keys } from '@mantine/utils';
 import {
   IconSelector,
   IconChevronDown,
   IconChevronUp,
   IconSearch,
-  IconEdit,
   IconTrash,
-} from "@tabler/icons";
-import { User } from "@/pages/admin";
-import { ActionIcon } from "@mantine/core";
+} from '@tabler/icons';
+import type { User } from '@/pages/admin';
+import { ActionIcon } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = createStyles((theme) => ({
   th: {
-    padding: "0 !important",
+    padding: '0 !important',
   },
 
   control: {
-    width: "100%",
+    width: '100%',
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
 
-    "&:hover": {
+    '&:hover': {
       backgroundColor:
-        theme.colorScheme === "dark"
+        theme.colorScheme === 'dark'
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
     },
@@ -72,8 +72,8 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
-        <Group position="apart">
-          <Text weight={500} size="sm">
+        <Group position='apart'>
+          <Text weight={500} size='sm'>
             {children}
           </Text>
           <Center className={classes.icon}>
@@ -115,10 +115,11 @@ function sortData(
 }
 
 export default function UsersTab({ data }: TableSortProps) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+  const { t } = useTranslation('admin');
 
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -136,7 +137,7 @@ export default function UsersTab({ data }: TableSortProps) {
   };
 
   const rows = sortedData.map((row) => (
-    <tr key={row.name}>
+    <tr key={row.email}>
       <td>{row.name}</td>
       <td>{row.email}</td>
       <td>{row.createdAt}</td>
@@ -156,39 +157,39 @@ export default function UsersTab({ data }: TableSortProps) {
   return (
     <ScrollArea>
       <TextInput
-        placeholder="Search by any field"
-        mb="md"
+        placeholder={t('Search by any field')!}
+        mb='md'
         icon={<IconSearch size={14} stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
       />
       <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        sx={{ tableLayout: "fixed", minWidth: 700 }}
+        horizontalSpacing='md'
+        verticalSpacing='xs'
+        sx={{ tableLayout: 'fixed', minWidth: 700 }}
       >
         <thead>
           <tr>
             <Th
-              sorted={sortBy === "name"}
+              sorted={sortBy === 'name'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}
+              onSort={() => setSorting('name')}
             >
-              Name
+              {t('Name')}
             </Th>
             <Th
-              sorted={sortBy === "email"}
+              sorted={sortBy === 'email'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("email")}
+              onSort={() => setSorting('email')}
             >
-              Email
+              {t('Email')}
             </Th>
             <Th
-              sorted={sortBy === "createdAt"}
+              sorted={sortBy === 'createdAt'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting("createdAt")}
+              onSort={() => setSorting('createdAt')}
             >
-              CreatedAt
+              {t('CreatedAt')}
             </Th>
             <th></th>
           </tr>
@@ -199,8 +200,8 @@ export default function UsersTab({ data }: TableSortProps) {
           ) : (
             <tr>
               <td colSpan={Object.keys(data[0] ? data[0] : {}).length}>
-                <Text weight={500} align="center">
-                  Nothing found
+                <Text weight={500} align='center'>
+                  {t('Nothing found')}
                 </Text>
               </td>
             </tr>

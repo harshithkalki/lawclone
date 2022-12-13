@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { HeaderMenu } from '../components/Header';
 import { Footer } from '../components/Footer';
 import RouterTransition from '@/components/RouterTransition';
+import { appWithTranslation } from 'next-i18next';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -82,4 +83,4 @@ function AppWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default trpc.withTRPC(MyApp);
+export default trpc.withTRPC(appWithTranslation(MyApp));

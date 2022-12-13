@@ -10,7 +10,9 @@ import {
 import { HeroTitle } from '../components/IndexPage/LawyerRequestForm';
 import { prisma } from '@/server/db/client';
 import { getSession } from 'next-auth/react';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 const useStylesFeatureGrid = createStyles((theme) => ({
   wrapper: {
@@ -50,6 +52,7 @@ interface FeaturesGridProps {
 
 function FeaturesGrid({ title, description }: FeaturesGridProps) {
   const { classes, theme } = useStylesFeatureGrid();
+  const { locale } = useRouter();
 
   return (
     <Container className={classes.wrapper}>
@@ -70,7 +73,7 @@ function FeaturesGrid({ title, description }: FeaturesGridProps) {
           { maxWidth: 755, cols: 1, spacing: 'xl' },
         ]}
       >
-        {laws.map((value, index) => (
+        {(locale === 'fr' ? LawsFr : LawsEn).map((value, index) => (
           <Paper key={index} shadow='xl' className={classes.lawBox}>
             <Image
               width={80}
@@ -90,7 +93,7 @@ function FeaturesGrid({ title, description }: FeaturesGridProps) {
   );
 }
 
-const laws = [
+const LawsEn = [
   {
     title: 'Civil Law',
     src: '/civil.png',
@@ -124,13 +127,51 @@ const laws = [
   },
 ];
 
+const LawsFr = [
+  {
+    title: 'Droit civil',
+    src: '/civil.png',
+    para: "Le droit civil est la partie du système juridique d'un pays qui concerne les affaires privées des citoyens",
+  },
+  {
+    title: 'Droit pénal',
+    src: '/criminal.png',
+    para: "Le droit pénal est l'ensemble des règles juridiques qui définissent les infractions et régissent l'arrestation, l'inculpation et le jugement des personnes soupçonnées et fixe les peines.",
+  },
+
+  {
+    title: 'Divorce',
+    src: '/divorce.png',
+    para: "Le divorce est une action judiciaire qui met fin au mariage civil prononcé par un tribunal à la demande d'un ou des deux époux",
+  },
+  {
+    title: 'Droit de l’immigration',
+    src: '/immigration.png',
+    para: "La loi sur l'immigration fait référence aux lois, réglementations et précédents juridiques nationaux régissant l'immigration et l'expulsion d'un pays.",
+  },
+  {
+    title: 'Droit fiscal',
+    src: '/tax.png',
+    para: "Le droit fiscal est le corps de règles qui confère à une autorité publique un droit sur les contribuables, leur imposant de transférer à l'autorité une partie de leurs revenus ou de leur propriété",
+  },
+  {
+    title: 'Droit médical',
+    src: '/medical.png',
+    para: 'Le droit médical est la branche du droit qui concerne les prérogatives et les responsabilités des professionnels de la santé et les droits du patient',
+  },
+];
+
 const IndexPage = () => {
+  const { t } = useTranslation('index');
+
   return (
     <div style={{ width: '100%' }}>
       <HeroTitle />
       <FeaturesGrid
-        title='Find Your Perfect Lawyer'
-        description='em ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore'
+        title={t('Find Your Perfect Lawyer')}
+        description={t(
+          'em ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore'
+        )}
       />
     </div>
   );

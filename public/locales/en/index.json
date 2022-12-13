@@ -1,0 +1,22 @@
+{
+  "Name": "Name",
+  "Email": "Email",
+  "CreatedAt": "CreatedAt",
+  "Users": "Users",
+  "Search by any field": "Search by any field",
+  "Nothing found": "Nothing found",
+  "Find Your Perfect Lawyer": "Find Your Perfect Lawyer",
+  "Is your request private or for business?": "Is your request private or for business?",
+  "PRIVATE": "PRIVATE",
+  "BUSINESS": "BUSINESS",
+  "What do you need help with?": "What do you need help with?",
+  "Where are you looking for a lawyer?": "Where are you looking for a lawyer?",
+  "Other Comments, Deadline": "Other Comments, Deadline",
+  "Start": "Start",
+  "Next step": "Next step",
+  "Back": "Back",
+  "Submit": "Submit",
+  "firstname": "First name",
+  "Postal Code": "Postal Code",
+  "Telephone": "Telephone"
+}

@@ -1,4 +1,5 @@
 import { createStyles, Image, Container, Title, Text } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 const useStyles = createStyles((theme) => ({
   inner: {
     display: 'flex',
@@ -56,14 +57,16 @@ const useStyles = createStyles((theme) => ({
 
 export const HeroTitle2 = () => {
   const { classes } = useStyles();
+  const { t } = useTranslation('index');
   return (
     <div>
       <Container>
         <div className={classes.inner}>
           <div className={classes.content}>
             <Title className={classes.title}>
-              Find Your <span className={classes.highlight}>Perfect</span>
-              <br /> Lawyer
+              {t('Find Your')}
+              <span className={classes.highlight}>Perfect</span>
+              <br /> {t('Lawyer')}
             </Title>
             <Text color='dimmed' mt='md'>
               Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam

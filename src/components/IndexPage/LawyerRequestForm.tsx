@@ -1,4 +1,5 @@
 import { createStyles, Container, Box } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { FormProgress } from './FormProgress';
 const BREAKPOINT = '@media (max-width: 755px)';
 
@@ -73,11 +74,12 @@ const useStyles = createStyles((theme) => ({
 
 export const HeroTitle = () => {
   const { classes } = useStyles();
+  const { t } = useTranslation('index');
 
   return (
     <div className={classes.wrapper}>
       <Container size={900} className={classes.inner}>
-        <h2 className={classes.title}>Find the best lawyer for you</h2>
+        <h2 className={classes.title}>{t('Find the best lawyer for you')}</h2>
         <Box
           sx={(theme) => ({
             backgroundColor:

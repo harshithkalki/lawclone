@@ -15,6 +15,7 @@ import { FaHome } from 'react-icons/fa';
 import { BsBuilding } from 'react-icons/bs';
 import WhatINeed from './WhatINeed';
 import Form1 from './form';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = createStyles((theme) => ({
   mainContent: {
@@ -40,6 +41,7 @@ const useStyles = createStyles((theme) => ({
 export const FormProgress = () => {
   const [active, setActive] = useState(0);
   const { classes } = useStyles();
+  const { t } = useTranslation('index');
   console.log(active);
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
@@ -61,17 +63,15 @@ export const FormProgress = () => {
         size='sm'
         hidden
       >
-        <Stepper.Step label='Start' />
-        <Stepper.Step label='Location' />
-        <Stepper.Step label='Location' />
-        <Stepper.Step label='Location' />
+        <Stepper.Step label={t('Start')} />
+        <Stepper.Step label={t('Location')} />
+        <Stepper.Step label={t('Location')} />
+        <Stepper.Step label={t('Location')} />
       </Stepper>
 
       <Group position='center' mt='xl' ml='auto' mr='auto'>
-        <Button variant='default' onClick={prevStep}>
-          Back
-        </Button>
-        <Button onClick={nextStep}>Next step</Button>
+        <Button variant='default'>{t('Back')}</Button>
+        <Button>{t('Next step')}</Button>
       </Group>
     </>
   );
@@ -83,6 +83,7 @@ const FirstPage = ({
   setActive: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const { classes } = useStyles();
+  const { t } = useTranslation('index');
   return (
     <>
       <Box
@@ -92,17 +93,17 @@ const FirstPage = ({
         w='100%'
       >
         <Title sx={{ textAlign: 'center' }} order={3}>
-          Is your request private or for business?
+          {t('Is your request private or for business?')}
         </Title>
         <Flex h='25rem' justify='space-evenly' align='center'>
           <div onClick={() => setActive(1)} className={classes.div}>
             <FaHome size={70} />
-            <Title order={2}>PRIVATE</Title>
+            <Title order={2}>{t('PRIVATE')}</Title>
           </div>
 
           <div onClick={() => setActive(1)} className={classes.div}>
             <BsBuilding size={70} />
-            <Title order={2}>BUSINESS</Title>
+            <Title order={2}>{t('BUSINESS')}</Title>
           </div>
         </Flex>
       </Box>
@@ -115,6 +116,8 @@ function FinalForm({
 }: {
   setActive: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const { t } = useTranslation('index');
+
   return (
     <>
       <Box
@@ -127,14 +130,14 @@ function FinalForm({
         }}
       >
         <Text mb={10} fw={500}>
-          Where are you looking for a lawyer?
+          {t('Where are you looking for a lawyer?')}
         </Text>
         <TextInput mb={10} w='100%' />
         <Text mb={10} fw={500}>
-          Other Comments, Deadline
+          {t('Other Comments, Deadline')}
         </Text>
         <Textarea mb={10} w='100%' />
-        <Button sx={{ alignSelf: 'flex-end' }}>Submit</Button>
+        <Button sx={{ alignSelf: 'flex-end' }}>{t('Submit')}</Button>
       </Box>
     </>
   );
