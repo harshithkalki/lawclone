@@ -12,7 +12,9 @@ const useStyles = createStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
       backgroundColor:
-        theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[6]
+          : theme.colors.gray[1],
       borderRadius: '15px',
       boxShadow: 'inherit',
     },

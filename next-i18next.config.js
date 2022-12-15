@@ -1,8 +1,9 @@
-const config = {
+const path = require('path');
+
+module.exports = {
   i18n: {
-    locales: ['en', 'fr'],
     defaultLocale: 'en',
+    locales: ['en', 'fr'],
+    localePath: path.resolve('./public/locales'),
   },
 };
-
-module.exports = config;

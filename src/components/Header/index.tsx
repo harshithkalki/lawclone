@@ -3,7 +3,7 @@ import {
   Header,
   Group,
   Button,
-  Text,
+  Image,
   Divider,
   Box,
   Burger,
@@ -11,8 +11,9 @@ import {
   ScrollArea,
   Select,
   Avatar,
+  useMantineColorScheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useColorScheme, useDisclosure } from '@mantine/hooks';
 import { useRouter } from 'next/router';
 import { UserMenu } from '../UserMenu';
 import SearchBar from '../searchBar';
@@ -104,12 +105,30 @@ export const HeaderMenu = ({ isAuth }: { isAuth: boolean }) => {
     push('/signup');
   };
   const { t } = useTranslation('common');
-
+  const { colorScheme } = useMantineColorScheme();
   return (
     <Box>
       <Header height={60} px='md'>
         <Group position='apart' sx={{ height: '100%' }}>
-          <Text>Vocatum</Text>
+          {colorScheme === 'dark' ? (
+            <Image
+              src={'/logo-light.png'}
+              width={100}
+              alt='logo'
+              onClick={() => push('/')}
+              style={{ cursor: 'pointer' }}
+              styles={{ image: { height: '100%' } }}
+            />
+          ) : (
+            <Image
+              src={'/logo-dark.png'}
+              width={100}
+              alt='logo'
+              onClick={() => push('/')}
+              style={{ cursor: 'pointer' }}
+              styles={{ image: { height: '100%' } }}
+            />
+          )}
 
           <Group className={classes.hiddenMobile}>
             <SearchBar />

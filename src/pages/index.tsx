@@ -12,7 +12,7 @@ import { prisma } from '@/server/db/client';
 import { getSession } from 'next-auth/react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const useStylesFeatureGrid = createStyles((theme) => ({
@@ -171,7 +171,7 @@ const IndexPage = () => {
       <FeaturesGrid
         title={t('Find Your Perfect Lawyer')}
         description={t(
-          'em ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore'
+          'This tool has been developed to help individuals and businesses find the right lawyer quickly. We offer the choice between different law firms in a few minutes.'
         )}
       />
     </div>

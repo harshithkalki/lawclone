@@ -3,7 +3,7 @@
   "Users": "Utilisateurs",
   "Search by any field": "Recherchez par n'importe quel champ",
   "Nothing found": "Aucun résultat trouvé",
-  "Find Your Perfect Lawyer": "Trouver votre avocat idéal",
+  "Find Your Perfect Lawyer": "Trouvez votre avocat parfait",
   "Is your request private or for business?": "Votre demande est-elle privée ou pour les affaires?",
   "PRIVATE": "PRIVÉ",
   "BUSINESS": "AFFAIRES",
@@ -17,5 +17,6 @@
   "firstname": "Prénom",
   "Postal Code": "Code postal",
   "Telephone": "Téléphone",
-  "Find the best lawyer for you": "Trouvez le meilleur avocat pour vous"
+  "Find the best lawyer for you": "Trouvez le meilleur avocat pour vous",
+  "This tool has been developed to help individuals and businesses find the right lawyer quickly. We offer the choice between different law firms in a few minutes.": "Cet outil a été développé afin de faciliter les particuliers et les entreprises à trouver rapidement l'avocat qui leur convient. Nous offrons ainsi le choix entre différents cabinets d'avocats en quelques minutes."
 }
