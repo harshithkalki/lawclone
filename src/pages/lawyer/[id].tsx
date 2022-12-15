@@ -15,27 +15,27 @@ import { Lawyer, Reviews } from '@prisma/client';
 import { IconMapPin, IconSearch, IconUser } from '@tabler/icons';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from 'firebaseconfig';
+import { GetServerSidePropsContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 export default function Lawyer1({
   lawyer,
-  isReviewed,
   reviews,
   username,
   fullName,
   myName,
 }: {
   lawyer: Lawyer | null;
-  isReviewed: boolean;
   reviews: Reviews[];
   username: string | undefined;
   fullName: string;
-  myName: string | undefined;
+  myName: string | null;
 }) {
   const router = useRouter();
   const { data: session } = useSession();
+  console.log(lawyer, reviews, username, fullName, myName);
 
   const [snapshot] = useCollection(collection(db, 'chats'));
   const handleClick = async () => {
@@ -210,21 +210,15 @@ export default function Lawyer1({
 export async function getServerSideProps(ctx: any) {
   const { id } = ctx.params;
   const session = await getSession(ctx);
+
   const u = await prisma?.user.findUnique({
     where: {
       id: session ? session?.user?.id : ' ',
     },
   });
+
   const lawyer = await prisma?.lawyer.findUnique({
     where: {
-      lawyerId: id,
-    },
-  });
-
-  const userId = session?.user?.id;
-  const Reviews = await prisma?.reviews.findMany({
-    where: {
-      clientId: userId,
       lawyerId: id,
     },
   });
@@ -241,28 +235,13 @@ export async function getServerSideProps(ctx: any) {
     },
   });
 
-  if (Reviews && Reviews?.length > 0) {
-    return {
-      props: {
-        lawyer: lawyer,
-        isReviewed: true,
-        reviews: JSON.parse(JSON.stringify(reviews)),
-        username: user?.username ? user.username : ' ',
-        fullName: user?.firstName + ' ' + user?.lastName,
-      },
-    };
-  }
-
-  console.log(lawyer, reviews, user?.username, u?.username);
-
   return {
     props: {
-      lawyer: JSON.parse(JSON.stringify(lawyer)),
-      isReviewed: false,
+      lawyer: lawyer,
       reviews: JSON.parse(JSON.stringify(reviews)),
-      username: user?.username ? user.username : '',
-      myName: u ? u?.username : ' ',
+      username: user?.username ? user.username : ' ',
       fullName: user?.firstName + ' ' + user?.lastName,
+      myName: u ? u.username : null,
     },
   };
 }
