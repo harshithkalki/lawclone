@@ -237,7 +237,7 @@ export async function getServerSideProps(ctx: any) {
 
   return {
     props: {
-      lawyer: lawyer,
+      lawyer: JSON.parse(JSON.stringify(lawyer)),
       reviews: JSON.parse(JSON.stringify(reviews)),
       username: user?.username ? user.username : ' ',
       fullName: user?.firstName + ' ' + user?.lastName,
