@@ -19,6 +19,7 @@ import { GetServerSidePropsContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { prisma } from 'src/server/db/client';
 
 export default function Lawyer1({
   lawyer,
@@ -235,12 +236,14 @@ export async function getServerSideProps(ctx: any) {
     },
   });
 
+  const fullName = user ? user.firstName + ' ' + user.lastName : ' ';
+
   return {
     props: {
       lawyer: JSON.parse(JSON.stringify(lawyer)),
       reviews: JSON.parse(JSON.stringify(reviews)),
       username: user?.username ? user.username : ' ',
-      fullName: user?.firstName + ' ' + user?.lastName,
+      fullName: fullName,
       myName: u ? u.username : null,
     },
   };
